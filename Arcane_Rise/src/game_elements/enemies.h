@@ -1,18 +1,25 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
+
 #include "raylib.h"
 
-const int MAX_ENEMIES = 5; 
-
-struct Enemies 
+namespace game 
 {
-    Rectangle rect;
-    float speed;
-    bool active;
-};
+    const int MAX_ENEMIES = 5; 
 
-void InitEnemies();
-void UpdateEnemies(float deltaTime);
-void DrawEnemies();
+    struct Enemies 
+    {
+        Rectangle rect;
+        float speedY;
+        float speedX;
+        float time;    
+        bool active;
+    };
 
-#endif
+    extern Enemies enemies[MAX_ENEMIES];
+
+    void InitEnemies();
+    void UpdateEnemies(float deltaTime);
+    void DrawEnemies();
+}
+#endif 
