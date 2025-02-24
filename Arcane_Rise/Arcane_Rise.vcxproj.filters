@@ -2,5 +2,27 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\game_elements\player.cpp">
+      <Filter>game_elements</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_manager\game.cpp">
+      <Filter>game_manager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="game_manager">
+      <UniqueIdentifier>{f79f7b65-370b-4867-aae7-0a834ff44312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game_elements">
+      <UniqueIdentifier>{5832225c-441c-4ea2-96f1-ba8bf3b59a64}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\game_elements\player.h">
+      <Filter>game_elements</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_manager\game.h">
+      <Filter>game_manager</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
