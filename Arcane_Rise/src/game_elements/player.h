@@ -12,5 +12,7 @@ namespace game
 
     void UpdatePlayer(Player& player, float deltaTime);
     void DrawPlayer(const Player& player);
+    void UpdateShieldPosition(const Player& player, float distance, float& shieldX, float& shieldY);
+    void DrawShield(float shieldX, float shieldY, float shieldRadius);
 } 
 #endif

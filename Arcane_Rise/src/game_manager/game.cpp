@@ -9,6 +9,9 @@ namespace game
         SetTargetFPS(60);
 
         Player player = { static_cast<float>(screenWidth) / 2.0f, static_cast<float>(screenHeight) - 50.0f, 20.0f };
+        float shieldRadius = 30.0f;
+        float shieldX = 0.0f, shieldY = 0.0f;
+        float shieldDistance = 60.0f;
         bool gameOver = false;
  
         while (!WindowShouldClose())
@@ -18,12 +21,14 @@ namespace game
             {
                 
                 UpdatePlayer(player, deltaTime);
+                UpdateShieldPosition(player, shieldDistance, shieldX, shieldY);
                 BeginDrawing();
                 ClearBackground(RAYWHITE);
 
                 if (!gameOver)
                 {
                     DrawPlayer(player);
+                    DrawShield(shieldX, shieldY, shieldRadius);
                 }
                 else 
                 {
