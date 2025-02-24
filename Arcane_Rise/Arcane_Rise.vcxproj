@@ -22,6 +22,7 @@
     <ClCompile Include="src\game_elements\enemies.cpp" />
     <ClCompile Include="src\game_elements\obstacles.cpp" />
     <ClCompile Include="src\game_elements\player.cpp" />
+    <ClCompile Include="src\game_elements\powerup.cpp" />
     <ClCompile Include="src\game_manager\game.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -29,6 +30,7 @@
     <ClInclude Include="src\game_elements\enemies.h" />
     <ClInclude Include="src\game_elements\obstacles.h" />
     <ClInclude Include="src\game_elements\player.h" />
+    <ClInclude Include="src\game_elements\powerup.h" />
     <ClInclude Include="src\game_manager\game.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

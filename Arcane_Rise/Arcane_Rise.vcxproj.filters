@@ -14,6 +14,9 @@
     <ClCompile Include="src\game_elements\enemies.cpp">
       <Filter>game_elements</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_elements\powerup.cpp">
+      <Filter>game_elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="game_manager">
@@ -34,6 +37,9 @@
       <Filter>game_elements</Filter>
     </ClInclude>
     <ClInclude Include="src\game_elements\enemies.h">
+      <Filter>game_elements</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_elements\powerup.h">
       <Filter>game_elements</Filter>
     </ClInclude>
   </ItemGroup>

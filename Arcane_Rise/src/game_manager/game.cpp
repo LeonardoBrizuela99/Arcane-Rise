@@ -17,6 +17,7 @@ namespace game
 
         InitObstacles();
         InitEnemies();
+        InitPowerUp();
 
         while (!WindowShouldClose()) 
         {
@@ -28,6 +29,7 @@ namespace game
                 UpdateShieldPosition(player, shieldDistance, shieldX, shieldY);
                 UpdateObstacles(deltaTime);
                 UpdateEnemies(deltaTime);
+                UpdatePowerUp(deltaTime);
                
                 for (int i = 0; i < MAX_OBSTACLES; i++)
                 {
@@ -72,6 +74,8 @@ namespace game
                 DrawShield(shieldX, shieldY, shieldRadius);
                 DrawObstacles();
                 DrawEnemies();
+                DrawPowerUp();
+
             }
             else 
             {
@@ -84,6 +88,7 @@ namespace game
                     player = { static_cast<float>(screenWidth) / 2.0f, static_cast<float>(screenHeight) - 50.0f, 20.0f };
                     InitObstacles();
                     InitEnemies();
+                    InitPowerUp();
                 }
             }
             EndDrawing();
