@@ -14,6 +14,8 @@ namespace game
         float shieldDistance = 60.0f;
         bool gameOver = false;
  
+        InitObstacles();
+        
         while (!WindowShouldClose())
         {
             float deltaTime = GetFrameTime();
@@ -22,6 +24,7 @@ namespace game
                 
                 UpdatePlayer(player, deltaTime);
                 UpdateShieldPosition(player, shieldDistance, shieldX, shieldY);
+                UpdateObstacles(deltaTime);
                 BeginDrawing();
                 ClearBackground(RAYWHITE);
 
@@ -29,6 +32,8 @@ namespace game
                 {
                     DrawPlayer(player);
                     DrawShield(shieldX, shieldY, shieldRadius);
+                    DrawObstacles();
+                   
                 }
                 else 
                 {

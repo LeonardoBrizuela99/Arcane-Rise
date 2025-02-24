@@ -8,6 +8,9 @@
     <ClCompile Include="src\game_manager\game.cpp">
       <Filter>game_manager</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_elements\obstacles.cpp">
+      <Filter>game_elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="game_manager">
@@ -23,6 +26,9 @@
     </ClInclude>
     <ClInclude Include="src\game_manager\game.h">
       <Filter>game_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_elements\obstacles.h">
+      <Filter>game_elements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

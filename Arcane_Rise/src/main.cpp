@@ -3,6 +3,6 @@ using namespace game;
 
 int main(void)
 {
-    RunGame();
+    game::RunGame();
     return 0;
 }
