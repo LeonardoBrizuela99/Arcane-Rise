@@ -10,6 +10,7 @@ namespace game
     const int screenWidth = 800;
     const int screenHeight = 600;
     const float playerSpeed = 200.0f;
+    float GetSpawnInterval(int score);
     void RunGame();
 }
 #endif 
