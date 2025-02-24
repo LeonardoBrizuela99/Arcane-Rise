@@ -11,6 +11,9 @@
     <ClCompile Include="src\game_elements\obstacles.cpp">
       <Filter>game_elements</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_elements\enemies.cpp">
+      <Filter>game_elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="game_manager">
@@ -28,6 +31,9 @@
       <Filter>game_manager</Filter>
     </ClInclude>
     <ClInclude Include="src\game_elements\obstacles.h">
+      <Filter>game_elements</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_elements\enemies.h">
       <Filter>game_elements</Filter>
     </ClInclude>
   </ItemGroup>
