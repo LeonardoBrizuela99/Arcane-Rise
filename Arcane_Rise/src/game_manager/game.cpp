@@ -45,6 +45,24 @@ namespace game
                         }
                     }
                 }
+
+                for (int i = 0; i < MAX_ENEMIES; i++) 
+                {
+                    if (enemies[i].active) 
+                    {
+                        if (CheckCollisionCircleRec({ shieldX, shieldY }, shieldRadius, enemies[i].rect))
+                        {                        
+                            enemies[i].rect.y = -20.0f;
+                            enemies[i].rect.x = static_cast<float>(rand() % (screenWidth - 20));
+                            enemies[i].time = 0.0f;
+                        }
+                        else if (CheckCollisionCircleRec({ player.x, player.y }, player.radius, enemies[i].rect))
+                        {
+                            gameOver = true;
+                            break;
+                        }
+                    }
+                }
             }
             BeginDrawing();
             ClearBackground(RAYWHITE);
