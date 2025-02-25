@@ -1,47 +1,48 @@
-#include "enemies.h"
 #include "game_manager/game.h"  
+#include "enemies.h"
+#include "raylib.h"
 #include <cstdlib>
 #include <cmath>
 
-namespace game 
+namespace game
 {
-    Enemies enemies[MAX_ENEMIES];
-
-    void InitEnemies() 
+    void InitEnemies(Enemies enemies[], int count, int screenWidth)
     {
-        for (int i = 0; i < MAX_ENEMIES; i++)
+        for (int i = 0; i < count; i++)
         {
-            enemies[i].rect = { static_cast<float>(rand() % (screenWidth - 20)), -20.0f, 20.0f, 20.0f };
-            enemies[i].speedY = static_cast<float>(180 + rand() % 120);
-            enemies[i].speedX = static_cast<float>(70 + rand() % 50);
+            enemies[i].rect.x = static_cast<float>(rand() % (screenWidth - 20));
+            enemies[i].rect.y = -20.0f;
+            enemies[i].rect.width = 20.0f;
+            enemies[i].rect.height = 20.0f;
+            enemies[i].speedY = static_cast<float>(180 + (rand() % 120));
+            enemies[i].speedX = static_cast<float>(70 + (rand() % 50));
             enemies[i].time = 0.0f;
             enemies[i].active = true;
         }
     }
 
-    void UpdateEnemies(float deltaTime)
+    void UpdateEnemies(Enemies enemies[], int count, float deltaTime)
     {
-        for (int i = 0; i < MAX_ENEMIES; i++)
+        for (int i = 0; i < count; i++)
         {
-            if (enemies[i].active) 
+            if (enemies[i].active)
             {
                 enemies[i].time += deltaTime * 3.0f;
                 enemies[i].rect.y += enemies[i].speedY * deltaTime;
                 enemies[i].rect.x += enemies[i].speedX * sinf(enemies[i].time) * deltaTime;
-
-                if (enemies[i].rect.y > screenHeight)
+                if (enemies[i].rect.y > GAME_SCREEN_HEIGHT)
                 {
                     enemies[i].rect.y = -20.0f;
-                    enemies[i].rect.x = static_cast<float>(rand() % (screenWidth - 20));
+                    enemies[i].rect.x = static_cast<float>(rand() % (GAME_SCREEN_WIDTH - 20));
                     enemies[i].time = 0.0f;
                 }
             }
         }
     }
 
-    void DrawEnemies()
+    void DrawEnemies(const Enemies enemies[], int count)
     {
-        for (int i = 0; i < MAX_ENEMIES; i++)
+        for (int i = 0; i < count; i++)
         {
             if (enemies[i].active)
             {
@@ -50,10 +51,10 @@ namespace game
         }
     }
 
-    void ResetEnemies(int index) {
-        enemies[index].rect.y = -20.0f;
-        enemies[index].rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(enemies[index].rect.width)));
-        enemies[index].time = 0.0f;
+    void ResetEnemies(Enemies& enemy, int screenWidth)
+    {
+        enemy.rect.y = -20.0f;
+        enemy.rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(enemy.rect.width)));
+        enemy.time = 0.0f;
     }
-
-}
+} 

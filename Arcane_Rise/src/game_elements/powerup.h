@@ -1,14 +1,12 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 
-#include "raylib.h"
-
-namespace game
-{ 
-    enum class PowerUpType
+namespace game 
+{
+    enum class PowerUpType 
     {
-        SHIELD,  
-        SPEED    
+        SHIELD,
+        SPEED
     };
 
     struct PowerUp
@@ -19,11 +17,9 @@ namespace game
         PowerUpType type;
     };
 
-    extern PowerUp powerUp;
-    
-    void InitPowerUp();
-    void UpdatePowerUp(float deltaTime);
-    void DrawPowerUp();
-    void ResetPowerUp();
-}
-#endif 
+    void InitPowerUp(PowerUp& powerUp, int screenWidth);
+    void UpdatePowerUp(PowerUp& powerUp, float deltaTime);
+    void DrawPowerUp(const PowerUp& powerUp);
+    void ResetPowerUp(PowerUp& powerUp, int screenWidth);
+} 
+#endif

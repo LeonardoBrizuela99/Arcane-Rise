@@ -1,27 +1,18 @@
 #ifndef OBSTACLES_H
 #define OBSTACLES_H
 
-#include <raylib.h>
-#include <cstdlib>
-#include "game_manager/game.h" 
-
 namespace game
 {
-
-    const int MAX_OBSTACLES = 10;
-
-    struct Obstacle 
+    struct Obstacle
     {
         Rectangle rect;
         float speedY;
         bool active;
     };
 
-    extern Obstacle obstacles[MAX_OBSTACLES];
-
-    void InitObstacles();
-    void UpdateObstacles(float deltaTime);
-    void DrawObstacles();
-    void ResetObstacle(int index);
+    void InitObstacles(Obstacle obstacles[], int count, int screenWidth);
+    void UpdateObstacles(Obstacle obstacles[], int count, float deltaTime);
+    void DrawObstacles(const Obstacle obstacles[], int count);
+    void ResetObstacle(Obstacle& obstacle, int screenWidth);
 } 
-#endif 
+#endif

@@ -1,24 +1,9 @@
-﻿#include "raylib.h"
-#include "game.h"
+﻿#include "game.h"
+#include "raylib.h"
 
 namespace game
-{
-    
-    Player player;
-    float shieldX = 0.0f, shieldY = 0.0f;
-    float shieldRadius = 30.0f;   
-    float shieldDistance = 60.0f; 
-    int localGameScore = 0;       
-    float spawnTimer = 0.0f;
-    bool gameOver = false;
-
-    float basePlayerSpeed = 300.0f;
-    float currentPlayerSpeed = 300.0f; 
-    float shieldPowerTimer = 0.0f;
-    float speedPowerTimer = 0.0f;
-    const float EFFECT_DURATION = 5.0f;
-
-    float GetSpawnInterval(int score)
+{  
+    static float GetSpawnInterval(int score)
     {
         if (score < 500) return 1.0f;
         else if (score < 1000) return 0.75f;
@@ -26,164 +11,183 @@ namespace game
         else return 0.25f;
     }
 
-    void InitGame()
+    static void InitObstaclesModule(GameState& state)
     {
-        player = { static_cast<float>(screenWidth) / 2.0f, static_cast<float>(screenHeight) - 50.0f, 20.0f };
-        localGameScore = 0;
-        spawnTimer = 0.0f;
-        gameOver = false;
-        currentPlayerSpeed = basePlayerSpeed;
-        shieldRadius = 30.0f; 
-        shieldPowerTimer = 0.0f;
-        speedPowerTimer = 0.0f;
-        InitObstacles();
-        InitEnemies();
-        InitPowerUp();
+        InitObstacles(state.obstacles, MAX_OBSTACLES, GAME_SCREEN_WIDTH);
+    }
+    static void InitEnemiesModule(GameState& state)
+    {
+        InitEnemies(state.enemies, MAX_ENEMIES, GAME_SCREEN_WIDTH);
+    }
+    static void InitPowerUpModule(GameState& state)
+    {
+        InitPowerUp(state.powerUp, GAME_SCREEN_WIDTH);
     }
 
-    
-    void UpdateGame(float deltaTime)
+    void InitGame(GameState& state)
     {
-        UpdatePlayer(player, deltaTime);
-        UpdateShieldPosition(player, shieldDistance, shieldX, shieldY);
-        UpdateObstacles(deltaTime);
-        UpdateEnemies(deltaTime);
-        UpdatePowerUp(deltaTime);
-
-        spawnTimer += deltaTime;
-        if (spawnTimer >= GetSpawnInterval(localGameScore))
-        {
-            spawnTimer = 0.0f;
-            localGameScore += 20;
-        }
-
-        if (shieldPowerTimer > 0.0f)
-        {
-            shieldPowerTimer -= deltaTime;
-            if (shieldPowerTimer > 0.0f)
-                shieldRadius = 50.0f; 
-            else
-                shieldRadius = 30.0f;
-        }
-
+        state.gameOver = false;
+        state.localGameScore = 0;
+        state.spawnTimer = 0.0f;
+        
+        InitPlayer(state.player, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+        
+        state.shieldDistance = 60.0f;
+        state.shieldRadius = shieldInitRadius;
+        state.shieldX = 0.0f;
+        state.shieldY = 0.0f;
        
-        if (speedPowerTimer > 0.0f)
+        state.basePlayerSpeed = basePlayerSpeedConst;
+        state.currentPlayerSpeed = basePlayerSpeedConst;
+        state.shieldPowerTimer = 0.0f;
+        state.speedPowerTimer = 0.0f;
+       
+        InitObstaclesModule(state);
+        InitEnemiesModule(state);
+        InitPowerUpModule(state);
+    }
+
+    void UpdateGame(GameState& state, float deltaTime)
+    {       
+        UpdatePlayer(state.player, deltaTime, state.currentPlayerSpeed);
+        UpdateShieldPosition(state.player, state.shieldDistance, state.shieldX, state.shieldY);
+        
+        UpdateObstacles(state.obstacles, MAX_OBSTACLES, deltaTime);
+        UpdateEnemies(state.enemies, MAX_ENEMIES, deltaTime);
+        UpdatePowerUp(state.powerUp, deltaTime);
+
+        state.spawnTimer += deltaTime;
+        if (state.spawnTimer >= GetSpawnInterval(state.localGameScore))
+            state.spawnTimer = 0.0f;
+      
+        if (state.shieldPowerTimer > 0.0f)
         {
-            speedPowerTimer -= deltaTime;
-            if (speedPowerTimer > 0.0f)
-                currentPlayerSpeed = basePlayerSpeed * 1.25f; 
+            state.shieldPowerTimer -= deltaTime;
+            if (state.shieldPowerTimer > 0.0f)
+                state.shieldRadius = shieldPowerupRadius;
             else
-                currentPlayerSpeed = basePlayerSpeed;
+                state.shieldRadius = shieldNoPowerupRadius;
+        }
+       
+        if (state.speedPowerTimer > 0.0f)
+        {
+            state.speedPowerTimer -= deltaTime;
+            if (state.speedPowerTimer > 0.0f)
+                state.currentPlayerSpeed = state.basePlayerSpeed * 1.25f;
+            else
+                state.currentPlayerSpeed = state.basePlayerSpeed;
         }
     }
 
-    
-    void ProcessCollisions()
+    void ProcessCollisions(GameState& state)
     {
         
         for (int i = 0; i < MAX_OBSTACLES; i++)
         {
-            if (obstacles[i].active)
+            if (state.obstacles[i].active)
             {
-                if (CheckCollisionCircleRec({ shieldX, shieldY }, shieldRadius, obstacles[i].rect))
+                if (CheckCollisionCircleRec(Vector2{ state.shieldX, state.shieldY },
+                    state.shieldRadius, state.obstacles[i].rect))
                 {
-                   
-                    ResetObstacle(i);
+                    ResetObstacle(state.obstacles[i], GAME_SCREEN_WIDTH);
+                    state.localGameScore += 20;
                 }
-                else if (CheckCollisionCircleRec({ player.x, player.y }, player.radius, obstacles[i].rect))
+                else if (CheckCollisionCircleRec(Vector2{ state.player.x, state.player.y },
+                    state.player.radius, state.obstacles[i].rect))
                 {
-                    gameOver = true;
+                    state.gameOver = true;
                     return;
                 }
             }
         }
-
        
         for (int i = 0; i < MAX_ENEMIES; i++)
         {
-            if (enemies[i].active)
+            if (state.enemies[i].active)
             {
-                if (CheckCollisionCircleRec({ shieldX, shieldY }, shieldRadius, enemies[i].rect))
+                if (CheckCollisionCircleRec(Vector2{ state.shieldX, state.shieldY },
+                    state.shieldRadius, state.enemies[i].rect))
                 {
-                  
-                    ResetEnemies(i);
+                    ResetEnemies(state.enemies[i], GAME_SCREEN_WIDTH);
+                    state.localGameScore += 50;
                 }
-                else if (CheckCollisionCircleRec({ player.x, player.y }, player.radius, enemies[i].rect))
+                else if (CheckCollisionCircleRec(Vector2{ state.player.x, state.player.y },
+                    state.player.radius, state.enemies[i].rect))
                 {
-                    gameOver = true;
+                    state.gameOver = true;
                     return;
                 }
             }
         }
-
-       
-        if (powerUp.active)
+        
+        if (state.powerUp.active)
         {
-            if (CheckCollisionCircleRec({ player.x, player.y }, player.radius, powerUp.rect) ||
-                CheckCollisionCircleRec({ shieldX, shieldY }, shieldRadius, powerUp.rect))
-            {          
-
-                switch (powerUp.type)
+            if (CheckCollisionCircleRec(Vector2{ state.player.x, state.player.y },
+                state.player.radius, state.powerUp.rect) ||
+                CheckCollisionCircleRec(Vector2{ state.shieldX, state.shieldY },
+                    state.shieldRadius, state.powerUp.rect))
+            {
+                switch (state.powerUp.type)
                 {
                 case PowerUpType::SHIELD:
-                    shieldPowerTimer = EFFECT_DURATION;
+                    state.shieldPowerTimer = EFFECT_DURATION;
                     break;
                 case PowerUpType::SPEED:
-                    speedPowerTimer = EFFECT_DURATION;
+                    state.speedPowerTimer = EFFECT_DURATION;
                     break;
                 default:
                     break;
                 }
-                ResetPowerUp();
-                localGameScore += 100;
+                ResetPowerUp(state.powerUp, GAME_SCREEN_WIDTH);
+                state.localGameScore += 100;
             }
         }
     }
-   
-    void RenderFrame()
+
+    void RenderFrame(const GameState& state)
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        if (!gameOver)
+        if (!state.gameOver)
         {
-            DrawPlayer(player);
-            DrawShield(shieldX, shieldY, shieldRadius);
-            DrawObstacles();
-            DrawEnemies();
-            DrawPowerUp();
-            DrawText(TextFormat("Score: %d", localGameScore), 10, 10, 20, BLACK);
+            DrawPlayer(state.player);
+            DrawShield(state.shieldX, state.shieldY, state.shieldRadius);
+            DrawObstacles(state.obstacles, MAX_OBSTACLES);
+            DrawEnemies(state.enemies, MAX_ENEMIES);
+            DrawPowerUp(state.powerUp);
+            DrawText(TextFormat("Score: %d", state.localGameScore), 10, 10, 20, BLACK);
         }
         else
         {
-            DrawText("GAME OVER", screenWidth / 2 - 50, screenHeight / 2, 30, RED);
-            DrawText("Press R to Restart", screenWidth / 2 - 70, screenHeight / 2 + 40, 20, DARKGRAY);
+            DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - 50, GAME_SCREEN_HEIGHT / 2, 30, RED);
+            DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - 70, GAME_SCREEN_HEIGHT / 2 + 40, 20, DARKGRAY);
         }
         EndDrawing();
     }
 
-   
     void RunGame()
     {
-        InitWindow(screenWidth, screenHeight, "Arcane Rise");
+        GameState state;
+        InitWindow(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, "Arcane Rise");
         SetTargetFPS(60);
-        InitGame();
+        InitGame(state);
 
         while (!WindowShouldClose())
         {
             float deltaTime = GetFrameTime();
 
-            if (!gameOver)
+            if (!state.gameOver)
             {
-                UpdateGame(deltaTime);
-                ProcessCollisions();
+                UpdateGame(state, deltaTime);
+                ProcessCollisions(state);
             }
             else if (IsKeyPressed(KEY_R))
             {
-                InitGame();
+                InitGame(state);
             }
-            RenderFrame();
+            RenderFrame(state);
         }
         CloseWindow();
     }
-}
+} 

@@ -1,42 +1,42 @@
+#include "game_manager/game.h" 
 #include "obstacles.h"
-#include <raylib.h>
+#include "raylib.h"
 #include <cstdlib>
 
 namespace game
 {
-    Obstacle obstacles[MAX_OBSTACLES];
-
-    void InitObstacles() 
-    {      
-        for (int i = 0; i < MAX_OBSTACLES; i++) 
+    void InitObstacles(Obstacle obstacles[], int count, int screenWidth)
+    {
+        for (int i = 0; i < count; i++)
         {
-            obstacles[i].rect = { static_cast<float>(rand() % (1280 - 30)), -30.0f, 30.0f, 30.0f };
-            obstacles[i].speedY = static_cast<float>(150 + rand() % 150);
+            obstacles[i].rect.x = static_cast<float>(rand() % (screenWidth - 30));
+            obstacles[i].rect.y = -30.0f;
+            obstacles[i].rect.width = 30.0f;
+            obstacles[i].rect.height = 30.0f;
+            obstacles[i].speedY = static_cast<float>(150 + (rand() % 150));
             obstacles[i].active = true;
         }
     }
 
-    void UpdateObstacles(float deltaTime)
-    {        
-        for (int i = 0; i < MAX_OBSTACLES; i++) 
+    void UpdateObstacles(Obstacle obstacles[], int count, float deltaTime)
+    {
+        for (int i = 0; i < count; i++)
         {
             if (obstacles[i].active)
             {
                 obstacles[i].rect.y += obstacles[i].speedY * deltaTime;
-                
                 if (obstacles[i].rect.y > 720)
                 {
                     obstacles[i].rect.y = -30.0f;
-                    obstacles[i].rect.x = static_cast<float>(rand() % (1280 - 30));
+                    obstacles[i].rect.x = static_cast<float>(rand() % (GAME_SCREEN_WIDTH - 30));
                 }
             }
         }
     }
 
-    void DrawObstacles()
+    void DrawObstacles(const Obstacle obstacles[], int count)
     {
-        
-        for (int i = 0; i < MAX_OBSTACLES; i++)
+        for (int i = 0; i < count; i++)
         {
             if (obstacles[i].active)
             {
@@ -45,9 +45,9 @@ namespace game
         }
     }
 
-    void ResetObstacle(int index)
+    void ResetObstacle(Obstacle& obstacle, int screenWidth)
     {
-        obstacles[index].rect.y = -30.0f;
-        obstacles[index].rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(obstacles[index].rect.width)));
+        obstacle.rect.y = -30.0f;
+        obstacle.rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(obstacle.rect.width)));
     }
 } 
