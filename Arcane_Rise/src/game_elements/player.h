@@ -4,6 +4,8 @@
 
 namespace game 
 {
+    extern float currentPlayerSpeed;
+
     struct Player 
     {
         float x, y;

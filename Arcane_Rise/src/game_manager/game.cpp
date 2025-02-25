@@ -12,6 +12,12 @@ namespace game
     float spawnTimer = 0.0f;
     bool gameOver = false;
 
+    float basePlayerSpeed = 300.0f;
+    float currentPlayerSpeed = 300.0f; 
+    float shieldPowerTimer = 0.0f;
+    float speedPowerTimer = 0.0f;
+    const float EFFECT_DURATION = 5.0f;
+
     float GetSpawnInterval(int score)
     {
         if (score < 500) return 1.0f;
@@ -26,6 +32,10 @@ namespace game
         localGameScore = 0;
         spawnTimer = 0.0f;
         gameOver = false;
+        currentPlayerSpeed = basePlayerSpeed;
+        shieldRadius = 30.0f; 
+        shieldPowerTimer = 0.0f;
+        speedPowerTimer = 0.0f;
         InitObstacles();
         InitEnemies();
         InitPowerUp();
@@ -45,6 +55,25 @@ namespace game
         {
             spawnTimer = 0.0f;
             localGameScore += 20;
+        }
+
+        if (shieldPowerTimer > 0.0f)
+        {
+            shieldPowerTimer -= deltaTime;
+            if (shieldPowerTimer > 0.0f)
+                shieldRadius = 50.0f; 
+            else
+                shieldRadius = 30.0f;
+        }
+
+       
+        if (speedPowerTimer > 0.0f)
+        {
+            speedPowerTimer -= deltaTime;
+            if (speedPowerTimer > 0.0f)
+                currentPlayerSpeed = basePlayerSpeed * 1.25f; 
+            else
+                currentPlayerSpeed = basePlayerSpeed;
         }
     }
 
@@ -92,7 +121,19 @@ namespace game
         {
             if (CheckCollisionCircleRec({ player.x, player.y }, player.radius, powerUp.rect) ||
                 CheckCollisionCircleRec({ shieldX, shieldY }, shieldRadius, powerUp.rect))
-            {               
+            {          
+
+                switch (powerUp.type)
+                {
+                case PowerUpType::SHIELD:
+                    shieldPowerTimer = EFFECT_DURATION;
+                    break;
+                case PowerUpType::SPEED:
+                    speedPowerTimer = EFFECT_DURATION;
+                    break;
+                default:
+                    break;
+                }
                 ResetPowerUp();
                 localGameScore += 100;
             }

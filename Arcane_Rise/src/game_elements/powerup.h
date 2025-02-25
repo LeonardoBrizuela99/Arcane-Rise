@@ -5,11 +5,18 @@
 
 namespace game
 { 
+    enum class PowerUpType
+    {
+        SHIELD,  
+        SPEED    
+    };
+
     struct PowerUp
     {
         Rectangle rect;
         float speedY;
         bool active;
+        PowerUpType type;
     };
 
     extern PowerUp powerUp;
