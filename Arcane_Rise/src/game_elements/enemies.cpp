@@ -49,4 +49,11 @@ namespace game
             }
         }
     }
+
+    void ResetEnemies(int index) {
+        enemies[index].rect.y = -20.0f;
+        enemies[index].rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(enemies[index].rect.width)));
+        enemies[index].time = 0.0f;
+    }
+
 }

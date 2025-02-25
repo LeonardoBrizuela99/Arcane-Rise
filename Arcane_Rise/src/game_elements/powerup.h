@@ -17,5 +17,6 @@ namespace game
     void InitPowerUp();
     void UpdatePowerUp(float deltaTime);
     void DrawPowerUp();
+    void ResetPowerUp();
 }
 #endif 

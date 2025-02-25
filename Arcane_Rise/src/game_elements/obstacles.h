@@ -3,12 +3,15 @@
 
 #include <raylib.h>
 #include <cstdlib>
+#include "game_manager/game.h" 
 
-namespace game {
+namespace game
+{
 
     const int MAX_OBSTACLES = 10;
 
-    struct Obstacle {
+    struct Obstacle 
+    {
         Rectangle rect;
         float speedY;
         bool active;
@@ -19,7 +22,6 @@ namespace game {
     void InitObstacles();
     void UpdateObstacles(float deltaTime);
     void DrawObstacles();
-
-} // namespace game
-
-#endif // OBSTACLES_H
+    void ResetObstacle(int index);
+} 
+#endif 

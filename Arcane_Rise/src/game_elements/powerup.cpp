@@ -32,4 +32,11 @@ namespace game
             DrawRectangleRec(powerUp.rect, GREEN);
         }
     }
+
+    void ResetPowerUp()
+    {
+        powerUp.rect.y = -20.0f;
+        powerUp.rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(powerUp.rect.width)));       
+        powerUp.active = true;
+    }
 }

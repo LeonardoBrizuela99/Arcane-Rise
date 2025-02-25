@@ -21,5 +21,6 @@ namespace game
     void InitEnemies();
     void UpdateEnemies(float deltaTime);
     void DrawEnemies();
+    void ResetEnemies(int index);
 }
 #endif 
