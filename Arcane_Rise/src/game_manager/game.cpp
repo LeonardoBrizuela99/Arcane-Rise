@@ -1,11 +1,210 @@
 ﻿#include "game.h"
 #include "raylib.h"
 
+namespace
+{
+    int mainMenuSelection = 0;
+    const int MAIN_MENU_COUNT = 5;
+
+    int pauseMenuSelection = 0;
+    const int PAUSE_MENU_COUNT = 5;
+
+    bool IsMouseOverRect(Rectangle rec)
+    {
+        Vector2 mousePos = GetMousePosition();
+        return CheckCollisionPointRec(mousePos, rec);
+    }
+
+
+    void UpdateMainMenu(game::GameState& state)
+    {
+        if (IsKeyPressed(KEY_DOWN))
+            mainMenuSelection = (mainMenuSelection + 1) % MAIN_MENU_COUNT;
+        if (IsKeyPressed(KEY_UP))
+            mainMenuSelection = (mainMenuSelection - 1 + MAIN_MENU_COUNT) % MAIN_MENU_COUNT;
+
+        const int baseY = 200;
+        const int spacing = 40;
+        const int fontSize = 30;
+        for (int i = 0; i < MAIN_MENU_COUNT; i++)
+        {
+            Rectangle itemRec = { (float)(game::GAME_SCREEN_WIDTH / 2 - 50), (float)(baseY + i * spacing), 200, (float)fontSize };
+            if (IsMouseOverRect(itemRec))
+            {
+                mainMenuSelection = i;
+
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                    break;
+            }
+        }
+
+        if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            switch (mainMenuSelection)
+            {
+            case 0:
+                state.currentScreen = game::ScreenState::GAMEPLAY;
+                game::InitGame(state);
+                state.currentScreen = game::ScreenState::GAMEPLAY;
+                break;
+            case 1:
+                state.previousScreen = game::ScreenState::MAIN_MENU;
+                state.currentScreen = game::ScreenState::OPTIONS;
+                break;
+            case 2:
+                state.previousScreen = game::ScreenState::MAIN_MENU;
+                state.currentScreen = game::ScreenState::INSTRUCTIONS;
+                break;
+            case 3:
+                state.previousScreen = game::ScreenState::MAIN_MENU;
+                state.currentScreen = game::ScreenState::CREDITS;
+                break;
+            case 4:
+                state.currentScreen = game::ScreenState::EXIT;
+                break;
+            default:
+                break;
+            }
+        }
+
+        if (IsKeyPressed(KEY_ESCAPE))
+        {
+            state.currentScreen = game::ScreenState::EXIT;
+        }
+    }
+
+    void RenderMainMenu(const game::GameState& state)
+    {
+        (void)state;
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        const int fontSize = 30;
+        const int baseY = 200;
+        const int spacing = 40;
+
+        DrawText("MAIN MENU", game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
+
+        const char* menuItems[MAIN_MENU_COUNT] = { "Play", "Options", "Instructions", "Credits", "Exit" };
+        for (int i = 0; i < MAIN_MENU_COUNT; i++)
+        {
+            int posY = baseY + i * spacing;
+            Color col = (i == mainMenuSelection) ? RED : BLACK;
+            DrawText(menuItems[i], game::GAME_SCREEN_WIDTH / 2 - 50, posY, fontSize, col);
+        }
+        EndDrawing();
+    }
+
+    void UpdatePauseMenu(game::GameState& state)
+    {
+        if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P))
+        {
+            state.currentScreen = game::ScreenState::GAMEPLAY;
+            return;
+        }
+
+        if (IsKeyPressed(KEY_DOWN))
+            pauseMenuSelection = (pauseMenuSelection + 1) % PAUSE_MENU_COUNT;
+        if (IsKeyPressed(KEY_UP))
+            pauseMenuSelection = (pauseMenuSelection - 1 + PAUSE_MENU_COUNT) % PAUSE_MENU_COUNT;
+
+        const int baseY = 180;
+        const int spacing = 40;
+        const int fontSize = 30;
+        for (int i = 0; i < PAUSE_MENU_COUNT; i++)
+        {
+            Rectangle itemRec = { (float)(game::GAME_SCREEN_WIDTH / 2 - 100), (float)(baseY + i * spacing), 200, (float)fontSize };
+            if (IsMouseOverRect(itemRec))
+            {
+                pauseMenuSelection = i;
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                    break;
+            }
+        }
+
+
+        if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            switch (pauseMenuSelection)
+            {
+            case 0:
+                state.currentScreen = game::ScreenState::GAMEPLAY;
+                break;
+            case 1:
+                game::InitGame(state);
+                state.currentScreen = game::ScreenState::GAMEPLAY;
+                break;
+            case 2:
+                state.previousScreen = game::ScreenState::PAUSE_MENU;
+                state.currentScreen = game::ScreenState::OPTIONS;
+                break;
+            case 3:
+                state.previousScreen = game::ScreenState::PAUSE_MENU;
+                state.currentScreen = game::ScreenState::INSTRUCTIONS;
+                break;
+            case 4:
+                state.currentScreen = game::ScreenState::MAIN_MENU;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    void RenderPauseMenu(const game::GameState& state)
+    {
+        (void)state;
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        const int fontSize = 30;
+        const int baseY = 180;
+        const int spacing = 40;
+
+        DrawText("PAUSE MENU", game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
+
+        const char* menuItems[PAUSE_MENU_COUNT] = { "Continue", "Restart", "Options", "Instructions", "Main Menu" };
+        for (int i = 0; i < PAUSE_MENU_COUNT; i++)
+        {
+            int posY = baseY + i * spacing;
+            Color col = (i == pauseMenuSelection) ? RED : BLACK;
+            DrawText(menuItems[i], game::GAME_SCREEN_WIDTH / 2 - 100, posY, fontSize, col);
+        }
+
+        EndDrawing();
+    }
+
+
+    void UpdateSubMenu(game::GameState& state)
+    {
+
+        if (IsKeyPressed(KEY_ESCAPE))
+            state.currentScreen = state.previousScreen;
+
+
+        Rectangle backButton = { (float)(game::GAME_SCREEN_WIDTH / 2 - 150), 400, 300, 20 };
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsMouseOverRect(backButton))
+            state.currentScreen = state.previousScreen;
+    }
+
+    void RenderSubMenu(const game::GameState& state, const char* title, const char* info)
+    {
+        (void)state;
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        DrawText(title, game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
+        DrawText(info, game::GAME_SCREEN_WIDTH / 2 - 150, 200, 20, BLACK);
+        DrawText("Press ESC to go back", game::GAME_SCREEN_WIDTH / 2 - 150, 400, 20, DARKGRAY);
+
+        EndDrawing();
+    }
+}
+
 namespace game
 {
     static float GetSpawnInterval(int score)
     {
-
         const int SCORE_THRESHOLD_1 = 500;
         const int SCORE_THRESHOLD_2 = 1000;
         const int SCORE_THRESHOLD_3 = 1500;
@@ -24,10 +223,12 @@ namespace game
     {
         InitObstacles(state.obstacles, MAX_OBSTACLES, GAME_SCREEN_WIDTH);
     }
+
     static void InitEnemiesModule(GameState& state)
     {
         InitEnemies(state.enemies, MAX_ENEMIES, GAME_SCREEN_WIDTH);
     }
+
     static void InitPowerUpModule(GameState& state)
     {
         InitPowerUp(state.powerUp, GAME_SCREEN_WIDTH);
@@ -36,7 +237,8 @@ namespace game
     void InitGame(GameState& state)
     {
         state.gameOver = false;
-        state.paused = false;
+        state.currentScreen = ScreenState::MAIN_MENU;
+        state.previousScreen = ScreenState::MAIN_MENU;
         state.localGameScore = 0;
         state.spawnTimer = 0.0f;
 
@@ -158,36 +360,22 @@ namespace game
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        const int SCORE_TEXT_POS_X = 10;
-        const int SCORE_TEXT_POS_Y = 10;
-        const int SCORE_TEXT_FONT_SIZE = 20;
-        const int GAME_OVER_FONT_SIZE = 30;
-        const int GAME_OVER_OFFSET_X = 50;
-        const int RESTART_OFFSET_X = 70;
-        const int RESTART_OFFSET_Y = 40;
+        DrawPlayer(state.player);
+        DrawShield(state.shieldX, state.shieldY, state.shieldRadius);
+        DrawObstacles(state.obstacles, MAX_OBSTACLES);
+        DrawEnemies(state.enemies, MAX_ENEMIES);
+        DrawPowerUp(state.powerUp);
+        DrawText(TextFormat("Score: %d", state.localGameScore),
+            10, 10, 20, BLACK);
 
-        if (!state.gameOver)
+        if (state.gameOver)
         {
-            DrawPlayer(state.player);
-            DrawShield(state.shieldX, state.shieldY, state.shieldRadius);
-            DrawObstacles(state.obstacles, MAX_OBSTACLES);
-            DrawEnemies(state.enemies, MAX_ENEMIES);
-            DrawPowerUp(state.powerUp);
-            DrawText(TextFormat("Score: %d", state.localGameScore),
-                SCORE_TEXT_POS_X, SCORE_TEXT_POS_Y, SCORE_TEXT_FONT_SIZE, BLACK);
-            if (state.paused)
-            {
-                DrawText("PAUSED", GAME_SCREEN_WIDTH / 2 - 50, GAME_SCREEN_HEIGHT / 2,
-                    GAME_OVER_FONT_SIZE, DARKGRAY);
-            }
+            DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - 50,
+                GAME_SCREEN_HEIGHT / 2, 30, RED);
+            DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - 70,
+                GAME_SCREEN_HEIGHT / 2 + 40, 20, DARKGRAY);
         }
-        else
-        {
-            DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - GAME_OVER_OFFSET_X,
-                GAME_SCREEN_HEIGHT / 2, GAME_OVER_FONT_SIZE, RED);
-            DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - RESTART_OFFSET_X,
-                GAME_SCREEN_HEIGHT / 2 + RESTART_OFFSET_Y, SCORE_TEXT_FONT_SIZE, DARKGRAY);
-        }
+
         EndDrawing();
     }
 
@@ -203,22 +391,60 @@ namespace game
         {
             float deltaTime = GetFrameTime();
 
-          
-            if (IsKeyPressed(KEY_P)||IsKeyPressed(KEY_ESCAPE))
-            {
-                state.paused = !state.paused;
-            }
+            if (state.currentScreen == ScreenState::EXIT)
+                break;
 
-            if (!state.gameOver && !state.paused)
+            switch (state.currentScreen)
             {
-                UpdateGame(state, deltaTime);
-                ProcessCollisions(state);
+            case ScreenState::MAIN_MENU:
+                UpdateMainMenu(state);
+                RenderMainMenu(state);
+                break;
+
+            case ScreenState::GAMEPLAY:
+
+                if (IsKeyPressed(KEY_P) || IsKeyPressed(KEY_ESCAPE))
+                {
+                    state.previousScreen = ScreenState::GAMEPLAY;
+                    state.currentScreen = ScreenState::PAUSE_MENU;
+                }
+
+                if (!state.gameOver)
+                {
+                    UpdateGame(state, deltaTime);
+                    ProcessCollisions(state);
+                }
+                else if (IsKeyPressed(KEY_R))
+                {
+                    InitGame(state);
+                    state.currentScreen = ScreenState::GAMEPLAY;
+                }
+                RenderFrame(state);
+                break;
+
+            case ScreenState::PAUSE_MENU:
+                UpdatePauseMenu(state);
+                RenderPauseMenu(state);
+                break;
+
+            case ScreenState::OPTIONS:
+                UpdateSubMenu(state);
+                RenderSubMenu(state, "OPTIONS", "null.");
+                break;
+
+            case ScreenState::INSTRUCTIONS:
+                UpdateSubMenu(state);
+                RenderSubMenu(state, "INSTRUCTIONS", "Use the arrows and A/S to move,\nuse the mouse to select and use ESC to go back.\nP: Pause/Resume");
+                break;
+
+            case ScreenState::CREDITS:
+                UpdateSubMenu(state);
+                RenderSubMenu(state, "CREDITS", "Developed by: Leonardo Brizuela. \n Game version: v0.2");
+                break;
+
+            default:
+                break;
             }
-            else if (state.gameOver && IsKeyPressed(KEY_R))
-            {
-                InitGame(state);
-            }
-            RenderFrame(state);
         }
         CloseWindow();
     }
