@@ -5,14 +5,17 @@
 
 namespace game
 {
+
+    const int OBSTACLE_SIZE = 30;
+
     void InitObstacles(Obstacle obstacles[], int count, int screenWidth)
     {
         for (int i = 0; i < count; i++)
         {
-            obstacles[i].rect.x = static_cast<float>(rand() % (screenWidth - 30));
-            obstacles[i].rect.y = -30.0f;
-            obstacles[i].rect.width = 30.0f;
-            obstacles[i].rect.height = 30.0f;
+            obstacles[i].rect.x = static_cast<float>(rand() % (screenWidth - OBSTACLE_SIZE));
+            obstacles[i].rect.y = -OBSTACLE_SIZE;
+            obstacles[i].rect.width = OBSTACLE_SIZE;
+            obstacles[i].rect.height = OBSTACLE_SIZE;
             obstacles[i].speedY = static_cast<float>(150 + (rand() % 150));
             obstacles[i].active = true;
         }
@@ -27,8 +30,8 @@ namespace game
                 obstacles[i].rect.y += obstacles[i].speedY * deltaTime;
                 if (obstacles[i].rect.y > 720)
                 {
-                    obstacles[i].rect.y = -30.0f;
-                    obstacles[i].rect.x = static_cast<float>(rand() % (GAME_SCREEN_WIDTH - 30));
+                    obstacles[i].rect.y = -OBSTACLE_SIZE;
+                    obstacles[i].rect.x = static_cast<float>(rand() % (GAME_SCREEN_WIDTH - OBSTACLE_SIZE));
                 }
             }
         }
@@ -50,4 +53,4 @@ namespace game
         obstacle.rect.y = -30.0f;
         obstacle.rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(obstacle.rect.width)));
     }
-} 
+}

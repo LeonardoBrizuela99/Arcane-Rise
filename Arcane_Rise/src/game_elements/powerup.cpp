@@ -2,14 +2,17 @@
 #include "powerup.h"
 #include <cstdlib>
 
-namespace game 
+namespace game
 {
+
+    const int POWERUP_SIZE = 20;
+
     void InitPowerUp(PowerUp& powerUp, int screenWidth)
     {
-        powerUp.rect.x = static_cast<float>(rand() % (screenWidth - 20));
-        powerUp.rect.y = -20.0f;
-        powerUp.rect.width = 20.0f;
-        powerUp.rect.height = 20.0f;
+        powerUp.rect.x = static_cast<float>(rand() % (screenWidth - POWERUP_SIZE));
+        powerUp.rect.y = -POWERUP_SIZE;
+        powerUp.rect.width = POWERUP_SIZE;
+        powerUp.rect.height = POWERUP_SIZE;
         powerUp.speedY = static_cast<float>(100 + (rand() % 50));
         powerUp.active = true;
         powerUp.type = (rand() % 2 == 0) ? PowerUpType::SHIELD : PowerUpType::SPEED;
@@ -43,4 +46,4 @@ namespace game
         powerUp.active = true;
         powerUp.type = (rand() % 2 == 0) ? PowerUpType::SHIELD : PowerUpType::SPEED;
     }
-} 
+}
