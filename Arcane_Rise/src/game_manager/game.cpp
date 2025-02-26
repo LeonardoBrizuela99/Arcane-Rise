@@ -36,6 +36,7 @@ namespace game
     void InitGame(GameState& state)
     {
         state.gameOver = false;
+        state.paused = false;
         state.localGameScore = 0;
         state.spawnTimer = 0.0f;
 
@@ -157,7 +158,6 @@ namespace game
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-
         const int SCORE_TEXT_POS_X = 10;
         const int SCORE_TEXT_POS_Y = 10;
         const int SCORE_TEXT_FONT_SIZE = 20;
@@ -175,6 +175,11 @@ namespace game
             DrawPowerUp(state.powerUp);
             DrawText(TextFormat("Score: %d", state.localGameScore),
                 SCORE_TEXT_POS_X, SCORE_TEXT_POS_Y, SCORE_TEXT_FONT_SIZE, BLACK);
+            if (state.paused)
+            {
+                DrawText("PAUSED", GAME_SCREEN_WIDTH / 2 - 50, GAME_SCREEN_HEIGHT / 2,
+                    GAME_OVER_FONT_SIZE, DARKGRAY);
+            }
         }
         else
         {
@@ -190,6 +195,7 @@ namespace game
     {
         GameState state;
         InitWindow(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, "Arcane Rise");
+        SetExitKey(0);
         SetTargetFPS(TARGET_FPS);
         InitGame(state);
 
@@ -197,12 +203,18 @@ namespace game
         {
             float deltaTime = GetFrameTime();
 
-            if (!state.gameOver)
+          
+            if (IsKeyPressed(KEY_P)||IsKeyPressed(KEY_ESCAPE))
+            {
+                state.paused = !state.paused;
+            }
+
+            if (!state.gameOver && !state.paused)
             {
                 UpdateGame(state, deltaTime);
                 ProcessCollisions(state);
             }
-            else if (IsKeyPressed(KEY_R))
+            else if (state.gameOver && IsKeyPressed(KEY_R))
             {
                 InitGame(state);
             }

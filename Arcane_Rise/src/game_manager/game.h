@@ -1,4 +1,4 @@
-﻿//#ifndef GAME_H
+﻿#ifndef GAME_H
 #define GAME_H
 
 #include "game_elements/player.h"
@@ -50,6 +50,7 @@ namespace game
         int localGameScore;
         float spawnTimer;
         bool gameOver;
+        bool paused;
 
         float basePlayerSpeed;
         float currentPlayerSpeed;
@@ -68,3 +69,4 @@ namespace game
     void RenderFrame(const GameState& state);
     void RunGame();
 }
+#endif
