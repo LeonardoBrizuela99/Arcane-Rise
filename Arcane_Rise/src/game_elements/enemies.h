@@ -17,5 +17,5 @@ namespace game
     void UpdateEnemies(Enemies enemies[], int count, float deltaTime);
     void DrawEnemies(const Enemies enemies[], int count);
     void ResetEnemies(Enemies& enemy, int screenWidth);
-} 
+}
 #endif

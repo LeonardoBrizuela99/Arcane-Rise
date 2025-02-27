@@ -62,6 +62,23 @@ namespace game
         InitObstaclesModule(state);
         InitEnemiesModule(state);
         InitPowerUpModule(state);
+
+
+        state.activeObstacles = 3;
+        state.activeEnemies = 0;
+        state.lastObstacleScoreThreshold = 0;
+        state.lastEnemyScoreThreshold = 500;
+        state.lastPowerUpScoreThreshold = 0;
+
+        for (int i = 0; i < MAX_OBSTACLES; i++) {
+            state.obstacles[i].active = (i < state.activeObstacles);
+        }
+
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+            state.enemies[i].active = false;
+        }
+
+        state.powerUp.active = false;
     }
 
     void UpdateGame(GameState& state, float deltaTime)
@@ -75,7 +92,58 @@ namespace game
 
         state.spawnTimer += deltaTime;
         if (state.spawnTimer >= GetSpawnInterval(state.localGameScore))
+        {
             state.spawnTimer = 0.0f;
+
+
+            if (state.localGameScore >= state.lastObstacleScoreThreshold + 100 && state.activeObstacles < MAX_OBSTACLES)
+            {
+                state.activeObstacles++;
+                state.obstacles[state.activeObstacles - 1].active = true;
+
+                float maxSpeed = 0.0f;
+                for (int i = 0; i < state.activeObstacles; i++)
+                {
+                    if (state.obstacles[i].speedY > maxSpeed)
+                        maxSpeed = state.obstacles[i].speedY;
+                }
+
+                float newSpeed = maxSpeed * 1.00f;
+                for (int i = 0; i < state.activeObstacles; i++)
+                {
+                    state.obstacles[i].speedY = newSpeed;
+                }
+                state.lastObstacleScoreThreshold += 100;
+            }
+
+
+            if (state.activeEnemies == 0 && state.localGameScore >= 500) {
+                state.activeEnemies = 1;
+                state.enemies[0].active = true;
+            }
+            else if (state.localGameScore >= state.lastEnemyScoreThreshold + 100 && state.activeEnemies < MAX_ENEMIES)
+            {
+                state.activeEnemies++;
+                state.enemies[state.activeEnemies - 1].active = true;
+                float maxSpeed = 0.0f;
+                for (int i = 0; i < state.activeEnemies; i++) {
+                    if (state.enemies[i].speedY > maxSpeed)
+                        maxSpeed = state.enemies[i].speedY;
+                }
+                float newSpeed = maxSpeed * 1.00f;
+                for (int i = 0; i < state.activeEnemies; i++) {
+                    state.enemies[i].speedY = newSpeed;
+                }
+                state.lastEnemyScoreThreshold += 500;
+            }
+
+
+            if (state.localGameScore >= state.lastPowerUpScoreThreshold + 150 && !state.powerUp.active) {
+                state.powerUp.active = true;
+                state.powerUp.speedY *= 1.05f;
+                state.lastPowerUpScoreThreshold += 150;
+            }
+        }
 
         if (state.shieldPowerTimer > 0.0f)
         {
@@ -83,7 +151,7 @@ namespace game
             if (state.shieldPowerTimer > 0.0f)
                 state.shieldRadius = SHIELD_POWERUP_RADIUS;
             else
-                state.shieldRadius = SHIELD_NO_POWERUP_RADIUS;
+                state.shieldRadius = SHIELD_INIT_RADIUS;
         }
 
         if (state.speedPowerTimer > 0.0f)

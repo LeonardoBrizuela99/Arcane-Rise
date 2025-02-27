@@ -5,7 +5,6 @@
 
 namespace game
 {
-
     const int OBSTACLE_SIZE = 30;
 
     void InitObstacles(Obstacle obstacles[], int count, int screenWidth)
@@ -17,7 +16,7 @@ namespace game
             obstacles[i].rect.width = OBSTACLE_SIZE;
             obstacles[i].rect.height = OBSTACLE_SIZE;
             obstacles[i].speedY = static_cast<float>(150 + (rand() % 150));
-            obstacles[i].active = true;
+            obstacles[i].active = (i == 0) ? true : false;
         }
     }
 

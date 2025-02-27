@@ -4,7 +4,6 @@
 
 namespace game
 {
-
     const int POWERUP_SIZE = 20;
 
     void InitPowerUp(PowerUp& powerUp, int screenWidth)
@@ -14,7 +13,7 @@ namespace game
         powerUp.rect.width = POWERUP_SIZE;
         powerUp.rect.height = POWERUP_SIZE;
         powerUp.speedY = static_cast<float>(100 + (rand() % 50));
-        powerUp.active = true;
+        powerUp.active = false;
         powerUp.type = (rand() % 2 == 0) ? PowerUpType::SHIELD : PowerUpType::SPEED;
     }
 
@@ -43,7 +42,7 @@ namespace game
     {
         powerUp.rect.y = -20.0f;
         powerUp.rect.x = static_cast<float>(rand() % (screenWidth - static_cast<int>(powerUp.rect.width)));
-        powerUp.active = true;
+        powerUp.active = false;
         powerUp.type = (rand() % 2 == 0) ? PowerUpType::SHIELD : PowerUpType::SPEED;
     }
 }

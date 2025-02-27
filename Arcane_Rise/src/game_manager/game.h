@@ -63,6 +63,13 @@ namespace game
         PowerUp powerUp;
         Obstacle obstacles[MAX_OBSTACLES];
         Enemies enemies[MAX_ENEMIES];
+
+
+        int activeObstacles;
+        int activeEnemies;
+        int lastObstacleScoreThreshold;
+        int lastEnemyScoreThreshold;
+        int lastPowerUpScoreThreshold;
     };
 
     void InitGame(GameState& state);

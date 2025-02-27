@@ -23,7 +23,7 @@ namespace game
             enemies[i].speedY = static_cast<float>(ENEMY_SPEED_Y_MIN + (rand() % ENEMY_SPEED_Y_RANGE));
             enemies[i].speedX = static_cast<float>(ENEMY_SPEED_X_MIN + (rand() % ENEMY_SPEED_X_RANGE));
             enemies[i].time = 0.0f;
-            enemies[i].active = true;
+            enemies[i].active = (i == 0) ? true : false;
         }
     }
 

@@ -1,9 +1,9 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 
-namespace game 
+namespace game
 {
-    enum class PowerUpType 
+    enum class PowerUpType
     {
         SHIELD,
         SPEED
@@ -21,5 +21,5 @@ namespace game
     void UpdatePowerUp(PowerUp& powerUp, float deltaTime);
     void DrawPowerUp(const PowerUp& powerUp);
     void ResetPowerUp(PowerUp& powerUp, int screenWidth);
-} 
+}
 #endif

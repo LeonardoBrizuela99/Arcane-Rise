@@ -14,5 +14,5 @@ namespace game
     void UpdateObstacles(Obstacle obstacles[], int count, float deltaTime);
     void DrawObstacles(const Obstacle obstacles[], int count);
     void ResetObstacle(Obstacle& obstacle, int screenWidth);
-} 
+}
 #endif

@@ -2,10 +2,8 @@
 #include "raylib.h"
 #include "game_manager/game.h"
 
-
 static int mainMenuSelection = 0;
 static const int MAIN_MENU_COUNT = 5;
-
 static int pauseMenuSelection = 0;
 static const int PAUSE_MENU_COUNT = 5;
 
@@ -25,10 +23,10 @@ namespace menu
         if (IsKeyPressed(KEY_UP))
             mainMenuSelection = (mainMenuSelection - 1 + MAIN_MENU_COUNT) % MAIN_MENU_COUNT;
 
-
         const int baseY = 200;
         const int spacing = 40;
         const int fontSize = 30;
+
         for (int i = 0; i < MAIN_MENU_COUNT; i++)
         {
             Rectangle itemRec = { static_cast<float>(game::GAME_SCREEN_WIDTH / 2 - 50),
@@ -43,7 +41,6 @@ namespace menu
                     break;
             }
         }
-
 
         if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -74,7 +71,6 @@ namespace menu
             }
         }
 
-
         if (IsKeyPressed(KEY_ESCAPE))
         {
             state.currentScreen = game::ScreenState::EXIT;
@@ -92,7 +88,6 @@ namespace menu
         const int spacing = 40;
 
         DrawText("MAIN MENU", game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
-
 
         char menuItems[MAIN_MENU_COUNT][32] = {
             "Play",
@@ -124,7 +119,6 @@ namespace menu
             pauseMenuSelection = (pauseMenuSelection + 1) % PAUSE_MENU_COUNT;
         if (IsKeyPressed(KEY_UP))
             pauseMenuSelection = (pauseMenuSelection - 1 + PAUSE_MENU_COUNT) % PAUSE_MENU_COUNT;
-
 
         const int baseY = 180;
         const int spacing = 40;
@@ -202,10 +196,8 @@ namespace menu
 
     void UpdateSubMenu(game::GameState& state)
     {
-
         if (IsKeyPressed(KEY_ESCAPE))
             state.currentScreen = state.previousScreen;
-
 
         Rectangle backButton = { static_cast<float>(game::GAME_SCREEN_WIDTH / 2 - 150), 400, 300, 20 };
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsMouseOverRect(backButton))
@@ -220,7 +212,6 @@ namespace menu
         DrawText(title, game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
         DrawText(info, game::GAME_SCREEN_WIDTH / 2 - 150, 200, 20, BLACK);
         DrawText("Press ESC to go back", game::GAME_SCREEN_WIDTH / 2 - 150, 400, 20, DARKGRAY);
-
         EndDrawing();
     }
 }
