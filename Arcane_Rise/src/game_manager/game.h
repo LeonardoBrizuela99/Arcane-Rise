@@ -5,6 +5,7 @@
 #include "game_elements/powerup.h"
 #include "game_elements/obstacles.h"
 #include "game_elements/enemies.h"
+#include "game_elements/side_enemy.h"  
 
 namespace game
 {
@@ -21,7 +22,7 @@ namespace game
     const float BASE_PLAYER_SPEED = 300.0f;
     const float SPEED_POWER_MULTIPLIER = 1.25f;
 
-    const int MAX_OBSTACLES = 10;
+    const int MAX_OBSTACLES = 20;
     const int MAX_ENEMIES = 5;
 
     const int SCORE_INCREMENT_OBSTACLE = 20;
@@ -63,13 +64,17 @@ namespace game
         PowerUp powerUp;
         Obstacle obstacles[MAX_OBSTACLES];
         Enemies enemies[MAX_ENEMIES];
-
+        SideEnemy sideEnemies[MAX_SIDE_ENEMIES];
 
         int activeObstacles;
         int activeEnemies;
+        int activeSideEnemies;
         int lastObstacleScoreThreshold;
         int lastEnemyScoreThreshold;
         int lastPowerUpScoreThreshold;
+        int lastSideEnemyScoreThreshold;
+        float sideEnemyRespawnTimers[MAX_SIDE_ENEMIES];
+
     };
 
     void InitGame(GameState& state);

@@ -6,9 +6,9 @@ namespace game
 {
     static float GetSpawnInterval(int score)
     {
-        const int SCORE_THRESHOLD_1 = 500;
-        const int SCORE_THRESHOLD_2 = 1000;
-        const int SCORE_THRESHOLD_3 = 1500;
+        const int SCORE_THRESHOLD_1 = 1500;
+        const int SCORE_THRESHOLD_2 = 2000;
+        const int SCORE_THRESHOLD_3 = 4500;
         const float SPAWN_INTERVAL_1 = 1.0f;
         const float SPAWN_INTERVAL_2 = 0.75f;
         const float SPAWN_INTERVAL_3 = 0.5f;
@@ -39,6 +39,11 @@ namespace game
         InitPowerUp(state.powerUp, GAME_SCREEN_WIDTH);
     }
 
+    static void InitSideEnemiesModule(GameState& state)
+    {
+        InitSideEnemies(state.sideEnemies, MAX_SIDE_ENEMIES, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
+    }
+
     void InitGame(GameState& state)
     {
         state.gameOver = false;
@@ -62,23 +67,37 @@ namespace game
         InitObstaclesModule(state);
         InitEnemiesModule(state);
         InitPowerUpModule(state);
-
+        InitSideEnemiesModule(state);
 
         state.activeObstacles = 3;
         state.activeEnemies = 0;
+        state.activeSideEnemies = 0;
+
         state.lastObstacleScoreThreshold = 0;
         state.lastEnemyScoreThreshold = 500;
         state.lastPowerUpScoreThreshold = 0;
+        state.lastSideEnemyScoreThreshold = 1000;
 
-        for (int i = 0; i < MAX_OBSTACLES; i++) {
+
+        for (int i = 0; i < MAX_SIDE_ENEMIES; i++)
+        {
+            state.sideEnemyRespawnTimers[i] = 0.0f;
+        }
+
+
+        for (int i = 0; i < MAX_OBSTACLES; i++)
+        {
             state.obstacles[i].active = (i < state.activeObstacles);
         }
 
         for (int i = 0; i < MAX_ENEMIES; i++) {
             state.enemies[i].active = false;
         }
-
         state.powerUp.active = false;
+
+        for (int i = 0; i < MAX_SIDE_ENEMIES; i++) {
+            state.sideEnemies[i].active = false;
+        }
     }
 
     void UpdateGame(GameState& state, float deltaTime)
@@ -89,40 +108,34 @@ namespace game
         UpdateObstacles(state.obstacles, MAX_OBSTACLES, deltaTime);
         UpdateEnemies(state.enemies, MAX_ENEMIES, deltaTime);
         UpdatePowerUp(state.powerUp, deltaTime);
+        UpdateSideEnemies(state.sideEnemies, MAX_SIDE_ENEMIES, deltaTime);
 
         state.spawnTimer += deltaTime;
         if (state.spawnTimer >= GetSpawnInterval(state.localGameScore))
         {
             state.spawnTimer = 0.0f;
 
-
-            if (state.localGameScore >= state.lastObstacleScoreThreshold + 100 && state.activeObstacles < MAX_OBSTACLES)
-            {
+            if (state.localGameScore >= state.lastObstacleScoreThreshold + 100 && state.activeObstacles < MAX_OBSTACLES) {
                 state.activeObstacles++;
                 state.obstacles[state.activeObstacles - 1].active = true;
-
                 float maxSpeed = 0.0f;
-                for (int i = 0; i < state.activeObstacles; i++)
-                {
+                for (int i = 0; i < state.activeObstacles; i++) {
                     if (state.obstacles[i].speedY > maxSpeed)
                         maxSpeed = state.obstacles[i].speedY;
                 }
-
-                float newSpeed = maxSpeed * 1.00f;
-                for (int i = 0; i < state.activeObstacles; i++)
-                {
+                float newSpeed = maxSpeed * 1.02f;
+                for (int i = 0; i < state.activeObstacles; i++) {
                     state.obstacles[i].speedY = newSpeed;
                 }
-                state.lastObstacleScoreThreshold += 100;
+                state.lastObstacleScoreThreshold += 300;
             }
 
-
-            if (state.activeEnemies == 0 && state.localGameScore >= 500) {
+            if (state.activeEnemies == 0 && state.localGameScore >= 500)
+            {
                 state.activeEnemies = 1;
                 state.enemies[0].active = true;
             }
-            else if (state.localGameScore >= state.lastEnemyScoreThreshold + 100 && state.activeEnemies < MAX_ENEMIES)
-            {
+            else if (state.localGameScore >= state.lastEnemyScoreThreshold + 100 && state.activeEnemies < MAX_ENEMIES) {
                 state.activeEnemies++;
                 state.enemies[state.activeEnemies - 1].active = true;
                 float maxSpeed = 0.0f;
@@ -130,18 +143,39 @@ namespace game
                     if (state.enemies[i].speedY > maxSpeed)
                         maxSpeed = state.enemies[i].speedY;
                 }
-                float newSpeed = maxSpeed * 1.00f;
+                float newSpeed = maxSpeed * 1.02f;
                 for (int i = 0; i < state.activeEnemies; i++) {
                     state.enemies[i].speedY = newSpeed;
                 }
                 state.lastEnemyScoreThreshold += 500;
             }
 
-
-            if (state.localGameScore >= state.lastPowerUpScoreThreshold + 150 && !state.powerUp.active) {
+            if (state.localGameScore >= state.lastPowerUpScoreThreshold + 300 && !state.powerUp.active) {
                 state.powerUp.active = true;
-                state.powerUp.speedY *= 1.05f;
-                state.lastPowerUpScoreThreshold += 150;
+                state.powerUp.speedY *= 1.02f;
+                state.lastPowerUpScoreThreshold += 300;
+            }
+        }
+
+        if (state.activeSideEnemies == 0 && state.localGameScore >= state.lastSideEnemyScoreThreshold) {
+            state.activeSideEnemies = 1;
+
+            if (state.sideEnemyRespawnTimers[0] <= 0.0f)
+                state.sideEnemyRespawnTimers[0] = static_cast<float>(GetRandomValue(5, 10));
+        }
+        else if (state.localGameScore >= state.lastSideEnemyScoreThreshold + 200 && state.activeSideEnemies < MAX_SIDE_ENEMIES) {
+            state.activeSideEnemies++;
+            state.lastSideEnemyScoreThreshold += 500;
+            state.sideEnemyRespawnTimers[state.activeSideEnemies - 1] = static_cast<float>(GetRandomValue(5, 10));
+        }
+
+        for (int i = 0; i < state.activeSideEnemies; i++) {
+            if (!state.sideEnemies[i].active) {
+                state.sideEnemyRespawnTimers[i] -= deltaTime;
+                if (state.sideEnemyRespawnTimers[i] <= 0.0f) {
+                    ResetSideEnemy(state.sideEnemies[i], GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
+                    state.sideEnemyRespawnTimers[i] = 0.0f;
+                }
             }
         }
 
@@ -226,6 +260,26 @@ namespace game
                 state.localGameScore += SCORE_INCREMENT_POWERUP;
             }
         }
+
+        for (int i = 0; i < MAX_SIDE_ENEMIES; i++)
+        {
+            if (state.sideEnemies[i].active)
+            {
+                if (CheckCollisionCircleRec(Vector2{ state.shieldX, state.shieldY },
+                    state.shieldRadius, state.sideEnemies[i].rect))
+                {
+                    state.sideEnemies[i].active = false;
+                    state.sideEnemyRespawnTimers[i] = static_cast<float>(GetRandomValue(5, 10));
+                    state.localGameScore += SCORE_INCREMENT_ENEMY;
+                }
+                else if (CheckCollisionCircleRec(Vector2{ state.player.x, state.player.y },
+                    state.player.radius, state.sideEnemies[i].rect))
+                {
+                    state.gameOver = true;
+                    return;
+                }
+            }
+        }
     }
 
     void RenderFrame(const GameState& state)
@@ -238,6 +292,7 @@ namespace game
         DrawObstacles(state.obstacles, MAX_OBSTACLES);
         DrawEnemies(state.enemies, MAX_ENEMIES);
         DrawPowerUp(state.powerUp);
+        DrawSideEnemies(state.sideEnemies, MAX_SIDE_ENEMIES);
         DrawText(TextFormat("Score: %d", state.localGameScore), 10, 10, 20, BLACK);
 
         if (state.gameOver)

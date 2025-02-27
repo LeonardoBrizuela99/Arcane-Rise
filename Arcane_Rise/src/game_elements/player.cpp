@@ -39,6 +39,12 @@ namespace game
         float mouseY = static_cast<float>(GetMouseY());
         float angle = static_cast<float>(atan2(mouseY - player.y, mouseX - player.x));
 
+        if (mouseX < player.x)
+        {
+            if (angle > 0)
+                angle -= 2 * PI;
+        }
+
         if (angle < MIN_SHIELD_ANGLE)
             angle = MIN_SHIELD_ANGLE;
         if (angle > MAX_SHIELD_ANGLE)
@@ -47,6 +53,7 @@ namespace game
         shieldX = player.x + distance * static_cast<float>(cos(angle));
         shieldY = player.y + distance * static_cast<float>(sin(angle));
     }
+
 
     void DrawShield(float shieldX, float shieldY, float shieldRadius)
     {

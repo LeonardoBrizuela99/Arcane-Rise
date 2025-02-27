@@ -20,6 +20,9 @@
     <ClCompile Include="src\screen_manager\menu.cpp">
       <Filter>screen_manager</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_elements\side_enemy.cpp">
+      <Filter>game_elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="game_manager">
@@ -50,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="src\screen_manager\menu.h">
       <Filter>screen_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_elements\side_enemy.h">
+      <Filter>game_elements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
