@@ -1,205 +1,6 @@
 ﻿#include "game.h"
 #include "raylib.h"
-
-namespace
-{
-    int mainMenuSelection = 0;
-    const int MAIN_MENU_COUNT = 5;
-
-    int pauseMenuSelection = 0;
-    const int PAUSE_MENU_COUNT = 5;
-
-    bool IsMouseOverRect(Rectangle rec)
-    {
-        Vector2 mousePos = GetMousePosition();
-        return CheckCollisionPointRec(mousePos, rec);
-    }
-
-
-    void UpdateMainMenu(game::GameState& state)
-    {
-        if (IsKeyPressed(KEY_DOWN))
-            mainMenuSelection = (mainMenuSelection + 1) % MAIN_MENU_COUNT;
-        if (IsKeyPressed(KEY_UP))
-            mainMenuSelection = (mainMenuSelection - 1 + MAIN_MENU_COUNT) % MAIN_MENU_COUNT;
-
-        const int baseY = 200;
-        const int spacing = 40;
-        const int fontSize = 30;
-        for (int i = 0; i < MAIN_MENU_COUNT; i++)
-        {
-            Rectangle itemRec = { (float)(game::GAME_SCREEN_WIDTH / 2 - 50), (float)(baseY + i * spacing), 200, (float)fontSize };
-            if (IsMouseOverRect(itemRec))
-            {
-                mainMenuSelection = i;
-
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-                    break;
-            }
-        }
-
-        if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-        {
-            switch (mainMenuSelection)
-            {
-            case 0:
-                state.currentScreen = game::ScreenState::GAMEPLAY;
-                game::InitGame(state);
-                state.currentScreen = game::ScreenState::GAMEPLAY;
-                break;
-            case 1:
-                state.previousScreen = game::ScreenState::MAIN_MENU;
-                state.currentScreen = game::ScreenState::OPTIONS;
-                break;
-            case 2:
-                state.previousScreen = game::ScreenState::MAIN_MENU;
-                state.currentScreen = game::ScreenState::INSTRUCTIONS;
-                break;
-            case 3:
-                state.previousScreen = game::ScreenState::MAIN_MENU;
-                state.currentScreen = game::ScreenState::CREDITS;
-                break;
-            case 4:
-                state.currentScreen = game::ScreenState::EXIT;
-                break;
-            default:
-                break;
-            }
-        }
-
-        if (IsKeyPressed(KEY_ESCAPE))
-        {
-            state.currentScreen = game::ScreenState::EXIT;
-        }
-    }
-
-    void RenderMainMenu(const game::GameState& state)
-    {
-        (void)state;
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        const int fontSize = 30;
-        const int baseY = 200;
-        const int spacing = 40;
-
-        DrawText("MAIN MENU", game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
-
-        const char* menuItems[MAIN_MENU_COUNT] = { "Play", "Options", "Instructions", "Credits", "Exit" };
-        for (int i = 0; i < MAIN_MENU_COUNT; i++)
-        {
-            int posY = baseY + i * spacing;
-            Color col = (i == mainMenuSelection) ? RED : BLACK;
-            DrawText(menuItems[i], game::GAME_SCREEN_WIDTH / 2 - 50, posY, fontSize, col);
-        }
-        EndDrawing();
-    }
-
-    void UpdatePauseMenu(game::GameState& state)
-    {
-        if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P))
-        {
-            state.currentScreen = game::ScreenState::GAMEPLAY;
-            return;
-        }
-
-        if (IsKeyPressed(KEY_DOWN))
-            pauseMenuSelection = (pauseMenuSelection + 1) % PAUSE_MENU_COUNT;
-        if (IsKeyPressed(KEY_UP))
-            pauseMenuSelection = (pauseMenuSelection - 1 + PAUSE_MENU_COUNT) % PAUSE_MENU_COUNT;
-
-        const int baseY = 180;
-        const int spacing = 40;
-        const int fontSize = 30;
-        for (int i = 0; i < PAUSE_MENU_COUNT; i++)
-        {
-            Rectangle itemRec = { (float)(game::GAME_SCREEN_WIDTH / 2 - 100), (float)(baseY + i * spacing), 200, (float)fontSize };
-            if (IsMouseOverRect(itemRec))
-            {
-                pauseMenuSelection = i;
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-                    break;
-            }
-        }
-
-
-        if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-        {
-            switch (pauseMenuSelection)
-            {
-            case 0:
-                state.currentScreen = game::ScreenState::GAMEPLAY;
-                break;
-            case 1:
-                game::InitGame(state);
-                state.currentScreen = game::ScreenState::GAMEPLAY;
-                break;
-            case 2:
-                state.previousScreen = game::ScreenState::PAUSE_MENU;
-                state.currentScreen = game::ScreenState::OPTIONS;
-                break;
-            case 3:
-                state.previousScreen = game::ScreenState::PAUSE_MENU;
-                state.currentScreen = game::ScreenState::INSTRUCTIONS;
-                break;
-            case 4:
-                state.currentScreen = game::ScreenState::MAIN_MENU;
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    void RenderPauseMenu(const game::GameState& state)
-    {
-        (void)state;
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        const int fontSize = 30;
-        const int baseY = 180;
-        const int spacing = 40;
-
-        DrawText("PAUSE MENU", game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
-
-        const char* menuItems[PAUSE_MENU_COUNT] = { "Continue", "Restart", "Options", "Instructions", "Main Menu" };
-        for (int i = 0; i < PAUSE_MENU_COUNT; i++)
-        {
-            int posY = baseY + i * spacing;
-            Color col = (i == pauseMenuSelection) ? RED : BLACK;
-            DrawText(menuItems[i], game::GAME_SCREEN_WIDTH / 2 - 100, posY, fontSize, col);
-        }
-
-        EndDrawing();
-    }
-
-
-    void UpdateSubMenu(game::GameState& state)
-    {
-
-        if (IsKeyPressed(KEY_ESCAPE))
-            state.currentScreen = state.previousScreen;
-
-
-        Rectangle backButton = { (float)(game::GAME_SCREEN_WIDTH / 2 - 150), 400, 300, 20 };
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsMouseOverRect(backButton))
-            state.currentScreen = state.previousScreen;
-    }
-
-    void RenderSubMenu(const game::GameState& state, const char* title, const char* info)
-    {
-        (void)state;
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        DrawText(title, game::GAME_SCREEN_WIDTH / 2 - 100, 100, 40, DARKBLUE);
-        DrawText(info, game::GAME_SCREEN_WIDTH / 2 - 150, 200, 20, BLACK);
-        DrawText("Press ESC to go back", game::GAME_SCREEN_WIDTH / 2 - 150, 400, 20, DARKGRAY);
-
-        EndDrawing();
-    }
-}
+#include "screen_manager/menu.h"
 
 namespace game
 {
@@ -213,10 +14,14 @@ namespace game
         const float SPAWN_INTERVAL_3 = 0.5f;
         const float SPAWN_INTERVAL_4 = 0.25f;
 
-        if (score < SCORE_THRESHOLD_1) return SPAWN_INTERVAL_1;
-        else if (score < SCORE_THRESHOLD_2) return SPAWN_INTERVAL_2;
-        else if (score < SCORE_THRESHOLD_3) return SPAWN_INTERVAL_3;
-        else return SPAWN_INTERVAL_4;
+        if (score < SCORE_THRESHOLD_1)
+            return SPAWN_INTERVAL_1;
+        else if (score < SCORE_THRESHOLD_2)
+            return SPAWN_INTERVAL_2;
+        else if (score < SCORE_THRESHOLD_3)
+            return SPAWN_INTERVAL_3;
+        else
+            return SPAWN_INTERVAL_4;
     }
 
     static void InitObstaclesModule(GameState& state)
@@ -365,15 +170,12 @@ namespace game
         DrawObstacles(state.obstacles, MAX_OBSTACLES);
         DrawEnemies(state.enemies, MAX_ENEMIES);
         DrawPowerUp(state.powerUp);
-        DrawText(TextFormat("Score: %d", state.localGameScore),
-            10, 10, 20, BLACK);
+        DrawText(TextFormat("Score: %d", state.localGameScore), 10, 10, 20, BLACK);
 
         if (state.gameOver)
         {
-            DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - 50,
-                GAME_SCREEN_HEIGHT / 2, 30, RED);
-            DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - 70,
-                GAME_SCREEN_HEIGHT / 2 + 40, 20, DARKGRAY);
+            DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - 50, GAME_SCREEN_HEIGHT / 2, 30, RED);
+            DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - 70, GAME_SCREEN_HEIGHT / 2 + 40, 20, DARKGRAY);
         }
 
         EndDrawing();
@@ -397,8 +199,8 @@ namespace game
             switch (state.currentScreen)
             {
             case ScreenState::MAIN_MENU:
-                UpdateMainMenu(state);
-                RenderMainMenu(state);
+                menu::UpdateMainMenu(state);
+                menu::RenderMainMenu(state);
                 break;
 
             case ScreenState::GAMEPLAY:
@@ -423,23 +225,23 @@ namespace game
                 break;
 
             case ScreenState::PAUSE_MENU:
-                UpdatePauseMenu(state);
-                RenderPauseMenu(state);
+                menu::UpdatePauseMenu(state);
+                menu::RenderPauseMenu(state);
                 break;
 
             case ScreenState::OPTIONS:
-                UpdateSubMenu(state);
-                RenderSubMenu(state, "OPTIONS", "null.");
+                menu::UpdateSubMenu(state);
+                menu::RenderSubMenu(state, "OPTIONS", "null.");
                 break;
 
             case ScreenState::INSTRUCTIONS:
-                UpdateSubMenu(state);
-                RenderSubMenu(state, "INSTRUCTIONS", "Use the arrows and A/S to move,\nuse the mouse to select and use ESC to go back.\nP: Pause/Resume");
+                menu::UpdateSubMenu(state);
+                menu::RenderSubMenu(state, "INSTRUCTIONS", "Use the arrows and A/S to move,\nuse the mouse to select and use ESC to go back.\nP: Pause/Resume");
                 break;
 
             case ScreenState::CREDITS:
-                UpdateSubMenu(state);
-                RenderSubMenu(state, "CREDITS", "Developed by: Leonardo Brizuela. \n Game version: v0.2");
+                menu::UpdateSubMenu(state);
+                menu::RenderSubMenu(state, "CREDITS", "Developed by: Leonardo Brizuela. \n Game version: v0.2");
                 break;
 
             default:

@@ -25,6 +25,7 @@
     <ClCompile Include="src\game_elements\powerup.cpp" />
     <ClCompile Include="src\game_manager\game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\screen_manager\menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game_elements\enemies.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="src\game_elements\player.h" />
     <ClInclude Include="src\game_elements\powerup.h" />
     <ClInclude Include="src\game_manager\game.h" />
+    <ClInclude Include="src\screen_manager\menu.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

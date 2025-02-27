@@ -17,6 +17,9 @@
     <ClCompile Include="src\game_elements\powerup.cpp">
       <Filter>game_elements</Filter>
     </ClCompile>
+    <ClCompile Include="src\screen_manager\menu.cpp">
+      <Filter>screen_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="game_manager">
@@ -24,6 +27,9 @@
     </Filter>
     <Filter Include="game_elements">
       <UniqueIdentifier>{5832225c-441c-4ea2-96f1-ba8bf3b59a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="screen_manager">
+      <UniqueIdentifier>{7982ff3e-1fe4-4c58-8c2f-420490fd9e9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="src\game_elements\powerup.h">
       <Filter>game_elements</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screen_manager\menu.h">
+      <Filter>screen_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
