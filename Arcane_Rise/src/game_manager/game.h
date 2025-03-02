@@ -74,7 +74,6 @@ namespace game
         int lastPowerUpScoreThreshold;
         int lastSideEnemyScoreThreshold;
         float sideEnemyRespawnTimers[MAX_SIDE_ENEMIES];
-
     };
 
     void InitGame(GameState& state);
@@ -83,4 +82,5 @@ namespace game
     void RenderFrame(const GameState& state);
     void RunGame();
 }
+
 #endif

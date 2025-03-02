@@ -7,7 +7,7 @@ namespace game
 {
     const int SIDE_ENEMY_WIDTH = 25;
     const int SIDE_ENEMY_HEIGHT = 25;
-    const float SIDE_ENEMY_SPEED = 80.0f;
+    const float SIDE_ENEMY_SPEED = 90.0f;
     void InitSideEnemies(SideEnemy sideEnemies[], int count, int screenWidth, int screenHeight, const Player& player)
     {
 
