@@ -24,7 +24,7 @@ namespace resource {
         powerUpTexture = LoadTexture("resources/powerup.png");
         sideEnemyTexture = LoadTexture("resources/side_enemy.png");
         buttonTexture = LoadTexture("../../res/textures/button.png");
-        backgroundTexture = LoadTexture("../../res/textures/main_menu.png");
+        backgroundTexture = LoadTexture("../../res/textures/main_menu_a.png");
 
 
         InitAudioDevice();
