@@ -1,33 +1,4 @@
-# Archivos y carpetas de Visual Studio
 .vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# Directorios de compilación
-[Bb]in/
-[Oo]bj/
-Debug/
-Release/
-x64/
-x86/
-
-# Archivos de compilación
-*.obj
-*.exe
-*.dll
-*.pdb
-*.ilk
-*.lib
-*.exp
-*.idb
-*.ipdb
-*.iobj
-
-# Archivos temporales
-*.log
-*.tlog
-*.tmp
-*.cache
-*.pch
+[bB]in/
+[oO]bj/
+debug/
