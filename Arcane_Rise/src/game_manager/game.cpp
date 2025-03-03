@@ -129,7 +129,7 @@ namespace game
                         maxSpeed = state.obstacles[i].speedY;
                     }
                 }
-                float newSpeed = maxSpeed * 1.0f;
+                float newSpeed = maxSpeed * 0.8f;
                 for (int i = 0; i < state.activeObstacles; i++) {
                     state.obstacles[i].speedY = newSpeed;
                 }
@@ -177,9 +177,34 @@ namespace game
                 state.activeSideEnemies++;
                 ResetSideEnemy(state.sideEnemies[state.activeSideEnemies - 1],
                     GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
-                state.lastSideEnemyScoreThreshold += 200;
+                state.lastSideEnemyScoreThreshold += 500;
             }
         }
+
+
+        for (int i = 0; i < MAX_SIDE_ENEMIES; i++)
+        {
+            if (!state.sideEnemies[i].active)
+            {
+
+                if (state.sideEnemyRespawnTimers[i] > 0.0f)
+                {
+                    state.sideEnemyRespawnTimers[i] -= deltaTime;
+                }
+
+                if (state.sideEnemyRespawnTimers[i] <= 0.0f)
+                {
+                    if (state.localGameScore >= state.lastSideEnemyScoreThreshold)
+                    {
+                        ResetSideEnemy(state.sideEnemies[i], GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
+                        state.activeSideEnemies++;
+
+                        state.sideEnemyRespawnTimers[i] = -1.0f;
+                    }
+                }
+            }
+        }
+
 
         if (state.shieldPowerTimer > 0.0f)
         {
@@ -272,8 +297,10 @@ namespace game
                     state.shieldRadius, state.sideEnemies[i].rect))
                 {
                     state.sideEnemies[i].active = false;
-                    state.sideEnemyRespawnTimers[i] = static_cast<float>(GetRandomValue(5, 6));
+
+                    state.sideEnemyRespawnTimers[i] = static_cast<float>(GetRandomValue(5, 10));
                     state.localGameScore += SCORE_INCREMENT_ENEMY;
+                    state.activeSideEnemies--;
                 }
                 else if (CheckCollisionCircleRec({ state.player.x, state.player.y },
                     state.player.radius, state.sideEnemies[i].rect))
@@ -283,6 +310,7 @@ namespace game
                 }
             }
         }
+
     }
 
 
@@ -318,7 +346,7 @@ namespace game
         SetExitKey(0);
         SetTargetFPS(TARGET_FPS);
 
-      
+       
         InitGame(state);
 
 
@@ -383,7 +411,9 @@ namespace game
             default:
                 break;
             }
-        }      
+        }
+
+       
         CloseWindow();
     }
 }

@@ -2,7 +2,6 @@
 #include "raylib.h"
 #include "game_manager/game.h"
 
-
 struct MenuOption {
     Rectangle rect;
     const char* text;
@@ -24,6 +23,7 @@ static bool mainMenuInitialized = false;
 
 static void InitMainMenuOptions()
 {
+
     float buttonWidth = 300;
     float buttonHeight = 50;
     float startX = game::GAME_SCREEN_WIDTH / 2 - buttonWidth / 2;
@@ -87,17 +87,15 @@ namespace menu {
 
     void RenderMainMenu(const game::GameState&) {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
 
+        ClearBackground(RAYWHITE);
         Vector2 mousePos = GetMousePosition();
         for (int i = 0; i < MAIN_MENU_OPTION_COUNT; i++) {
             bool hovered = CheckCollisionPointRec(mousePos, mainMenuOptions[i].rect);
             Color btnColor = hovered ? BUTTON_HOVER_BG : BUTTON_NORMAL_BG;
             Color txtColor = hovered ? TEXT_HOVER : TEXT_NORMAL;
-
             DrawRectangleRec(mainMenuOptions[i].rect, btnColor);
             DrawRectangleLinesEx(mainMenuOptions[i].rect, 2, BLACK);
-
             int fontSize = 20;
             int textWidth = MeasureText(mainMenuOptions[i].text, fontSize);
             int textX = (int)mainMenuOptions[i].rect.x + (((int)mainMenuOptions[i].rect.width - textWidth) / 2);
@@ -106,6 +104,7 @@ namespace menu {
         }
         EndDrawing();
     }
+
 
 
     static const int PAUSE_MENU_OPTION_COUNT = 5;
@@ -194,14 +193,19 @@ namespace menu {
     }
 
 
-    void UpdateSubMenu(game::GameState& state) {
+    void UpdateSubMenu(game::GameState& state)
+    {
+
         if (IsKeyPressed(KEY_ESCAPE))
             state.currentScreen = state.previousScreen;
 
-        Rectangle backButton = { game::GAME_SCREEN_WIDTH / 2 - 150, 400, 300, 50 };
+        const int backBtnWidth = 150;
+        const int backBtnHeight = 50;
+        Rectangle backButton = { 20, 600 - backBtnHeight - 20, backBtnWidth, backBtnHeight };
         if (CheckCollisionPointRec(GetMousePosition(), backButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             state.currentScreen = state.previousScreen;
     }
+
 
     void RenderSubMenu(const game::GameState&, const char title[], const char info[]) {
         BeginDrawing();
@@ -213,7 +217,10 @@ namespace menu {
         DrawText(info, game::GAME_SCREEN_WIDTH / 2 - 200, 200, 20, BLACK);
 
 
-        Rectangle backButton = { game::GAME_SCREEN_WIDTH / 2 - 150, 400, 300, 50 };
+        const int backBtnWidth = 150;
+        const int backBtnHeight = 50;
+        Rectangle backButton = { 20, 600 - backBtnHeight - 20, backBtnWidth, backBtnHeight };
+
         bool hovered = CheckCollisionPointRec(GetMousePosition(), backButton);
         Color btnColor = hovered ? BUTTON_HOVER_BG : BUTTON_NORMAL_BG;
         Color txtColor = hovered ? TEXT_HOVER : TEXT_NORMAL;
@@ -227,4 +234,6 @@ namespace menu {
 
         EndDrawing();
     }
+
+
 }
