@@ -23,6 +23,9 @@
     <ClCompile Include="src\game_elements\side_enemy.cpp">
       <Filter>game_elements</Filter>
     </ClCompile>
+    <ClCompile Include="src\resource_manager\resource_manager.cpp">
+      <Filter>resource_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="game_manager">
@@ -33,6 +36,9 @@
     </Filter>
     <Filter Include="screen_manager">
       <UniqueIdentifier>{7982ff3e-1fe4-4c58-8c2f-420490fd9e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource_manager">
+      <UniqueIdentifier>{25596c28-415c-423e-9430-a376f676f2ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +62,9 @@
     </ClInclude>
     <ClInclude Include="src\game_elements\side_enemy.h">
       <Filter>game_elements</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource_manager\resource_manager.h">
+      <Filter>resource_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
