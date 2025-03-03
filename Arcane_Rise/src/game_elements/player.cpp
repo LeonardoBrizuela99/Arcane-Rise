@@ -1,3 +1,4 @@
+#include "resource_manager/resource_manager.h"
 #include "game_manager/game.h" 
 #include "player.h"
 #include <math.h>
@@ -57,6 +58,11 @@ namespace game
 
     void DrawShield(float shieldX, float shieldY, float shieldRadius)
     {
-        DrawCircle(static_cast<int>(shieldX), static_cast<int>(shieldY), shieldRadius, DARKBLUE);
+        Rectangle source = { 0, 0, static_cast<float>(resource::shieldTexture.width), static_cast<float>(resource::shieldTexture.height) };
+        // Definir el rectángulo destino centrado en (shieldX, shieldY) y escalado según el radio (multiplicamos por 2 para cubrir el diámetro)
+        Rectangle dest = { shieldX - shieldRadius, shieldY - shieldRadius, shieldRadius * 2, shieldRadius * 2 };
+        // Dibujar la textura sin rotación y sin escalado adicional
+        DrawTexturePro(resource::shieldTexture, source, dest, { 0, 0 }, 0.0f, WHITE);
+        //DrawCircle(static_cast<int>(shieldX), static_cast<int>(shieldY), shieldRadius, DARKBLUE);
     }
 }

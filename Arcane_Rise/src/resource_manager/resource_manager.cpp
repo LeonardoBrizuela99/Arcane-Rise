@@ -11,6 +11,7 @@ namespace resource {
     Texture2D powerUpTexture = { 0 };
     Texture2D sideEnemyTexture = { 0 };
     Texture2D buttonTexture = { 0 };
+    Texture2D shieldTexture = { 0 };
 
     Sound shieldSound = { 0 };
     Sound explosionSound = { 0 };
@@ -25,6 +26,7 @@ namespace resource {
         sideEnemyTexture = LoadTexture("resources/side_enemy.png");
         buttonTexture = LoadTexture("../../res/textures/button.png");
         backgroundTexture = LoadTexture("../../res/textures/main_menu.png");
+        shieldTexture = LoadTexture("../../res/textures/escudo.png");
 
 
         InitAudioDevice();
@@ -45,7 +47,7 @@ namespace resource {
         UnloadTexture(sideEnemyTexture);
         UnloadTexture(buttonTexture);
         UnloadTexture(backgroundTexture);
-
+        UnloadTexture(shieldTexture);
 
 
         UnloadSound(shieldSound);
