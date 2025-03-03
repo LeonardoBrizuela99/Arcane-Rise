@@ -1,6 +1,8 @@
 #include "menu.h"
 #include "raylib.h"
 #include "game_manager/game.h"
+#include"resource_manager/resource_manager.h"
+
 
 struct MenuOption {
     Rectangle rect;
@@ -88,7 +90,7 @@ namespace menu {
     void RenderMainMenu(const game::GameState&) {
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        DrawTexture(resource::backgroundTexture, 0, 0, WHITE);
         Vector2 mousePos = GetMousePosition();
         for (int i = 0; i < MAIN_MENU_OPTION_COUNT; i++) {
             bool hovered = CheckCollisionPointRec(mousePos, mainMenuOptions[i].rect);

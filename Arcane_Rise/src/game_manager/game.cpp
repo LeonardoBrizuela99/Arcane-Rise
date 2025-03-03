@@ -1,5 +1,6 @@
 ﻿#include "game_manager/game.h"
 #include "screen_manager/menu.h"       
+#include "resource_manager/resource_manager.h" 
 #include "raylib.h"
 
 namespace game
@@ -346,7 +347,7 @@ namespace game
         SetExitKey(0);
         SetTargetFPS(TARGET_FPS);
 
-       
+        resource::LoadResources();
         InitGame(state);
 
 
@@ -413,7 +414,7 @@ namespace game
             }
         }
 
-       
+        resource::UnloadResources();
         CloseWindow();
     }
 }
