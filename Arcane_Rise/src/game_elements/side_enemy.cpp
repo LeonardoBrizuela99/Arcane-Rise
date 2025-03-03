@@ -7,7 +7,7 @@ namespace game
 {
     const int SIDE_ENEMY_WIDTH = 25;
     const int SIDE_ENEMY_HEIGHT = 25;
-    const float SIDE_ENEMY_SPEED = 90.0f;
+    const float SIDE_ENEMY_SPEED = 150.0f;
     void InitSideEnemies(SideEnemy sideEnemies[], int count, int screenWidth, int screenHeight, const Player& player)
     {
 
@@ -26,27 +26,27 @@ namespace game
         }
     }
 
-    void ResetSideEnemy(SideEnemy& enemy, int screenWidth, int screenHeight, const Player& player)
+    void ResetSideEnemy(SideEnemy& enemy, int screenWidth, const Player& player)
     {
-
-        screenHeight = screenHeight;
-
-
         int side = rand() % 2;
         enemy.active = true;
+
         enemy.rect.y = player.y;
         if (side == 0)
         {
-            enemy.rect.x = 0;
+
+            enemy.rect.x = -SIDE_ENEMY_WIDTH - 10;
             enemy.direction = 1;
         }
         else
         {
-            enemy.rect.x = static_cast<float>(screenWidth - SIDE_ENEMY_WIDTH);
+
+            enemy.rect.x = static_cast<float>(screenWidth) + 10;
             enemy.direction = -1;
         }
         enemy.speedX = SIDE_ENEMY_SPEED;
     }
+
 
     void UpdateSideEnemies(SideEnemy sideEnemies[], int count, float deltaTime)
     {

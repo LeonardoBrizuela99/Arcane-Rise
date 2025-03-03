@@ -130,7 +130,7 @@ namespace game
                         maxSpeed = state.obstacles[i].speedY;
                     }
                 }
-                float newSpeed = maxSpeed * 0.8f;
+                float newSpeed = maxSpeed * 1.0f;
                 for (int i = 0; i < state.activeObstacles; i++) {
                     state.obstacles[i].speedY = newSpeed;
                 }
@@ -170,41 +170,36 @@ namespace game
             if (state.activeSideEnemies == 0 && state.localGameScore >= state.lastSideEnemyScoreThreshold)
             {
                 state.activeSideEnemies = 1;
-                ResetSideEnemy(state.sideEnemies[0], GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
+                ResetSideEnemy(state.sideEnemies[0], GAME_SCREEN_WIDTH, state.player);
             }
             else if (state.localGameScore >= state.lastSideEnemyScoreThreshold + 200
                 && state.activeSideEnemies < MAX_SIDE_ENEMIES)
             {
                 state.activeSideEnemies++;
                 ResetSideEnemy(state.sideEnemies[state.activeSideEnemies - 1],
-                    GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
+                    GAME_SCREEN_WIDTH, state.player);
                 state.lastSideEnemyScoreThreshold += 500;
             }
         }
+
 
 
         for (int i = 0; i < MAX_SIDE_ENEMIES; i++)
         {
             if (!state.sideEnemies[i].active)
             {
-
-                if (state.sideEnemyRespawnTimers[i] > 0.0f)
+                if (state.localGameScore >= state.lastSideEnemyScoreThreshold)
                 {
                     state.sideEnemyRespawnTimers[i] -= deltaTime;
-                }
-
-                if (state.sideEnemyRespawnTimers[i] <= 0.0f)
-                {
-                    if (state.localGameScore >= state.lastSideEnemyScoreThreshold)
+                    if (state.sideEnemyRespawnTimers[i] <= 0.0f)
                     {
-                        ResetSideEnemy(state.sideEnemies[i], GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, state.player);
-                        state.activeSideEnemies++;
-
-                        state.sideEnemyRespawnTimers[i] = -1.0f;
+                        ResetSideEnemy(state.sideEnemies[i], GAME_SCREEN_WIDTH, state.player);
                     }
                 }
             }
         }
+
+
 
 
         if (state.shieldPowerTimer > 0.0f)
@@ -225,6 +220,81 @@ namespace game
                 state.currentPlayerSpeed = state.basePlayerSpeed;
         }
     }
+
+    void RenderGameOver(const GameState& state)
+    {
+
+        static const Color BUTTON_NORMAL_BG = { 250, 235, 215, 255 };
+        static const Color BUTTON_HOVER_BG = { 244, 164, 96, 255 };
+        static const Color TEXT_NORMAL = BLACK;
+        static const Color TEXT_HOVER = BLUE;
+
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+
+        int titleFontSize = 40;
+        int titleWidth = MeasureText("GAME OVER", titleFontSize);
+        DrawText("GAME OVER", static_cast<int>(GAME_SCREEN_WIDTH / 2 - titleWidth / 2), 100, titleFontSize, RED);
+
+
+        int scoreFontSize = 30;
+        const char* scoreText = TextFormat("Score: %d", state.localGameScore);
+        int scoreWidth = MeasureText(scoreText, scoreFontSize);
+        DrawText(scoreText, static_cast<int>(GAME_SCREEN_WIDTH / 2 - scoreWidth / 2), 160, scoreFontSize, BLACK);
+
+
+        Rectangle restartBtn = { static_cast<float>(GAME_SCREEN_WIDTH / 2 - 160), 250, 150, 50 };
+        Rectangle mainMenuBtn = { static_cast<float>(GAME_SCREEN_WIDTH / 2 + 10), 250, 150, 50 };
+
+        Vector2 mousePos = GetMousePosition();
+        bool hoverRestart = CheckCollisionPointRec(mousePos, restartBtn);
+        bool hoverMainMenu = CheckCollisionPointRec(mousePos, mainMenuBtn);
+
+        Color restartBtnColor = hoverRestart ? BUTTON_HOVER_BG : BUTTON_NORMAL_BG;
+        Color mainMenuBtnColor = hoverMainMenu ? BUTTON_HOVER_BG : BUTTON_NORMAL_BG;
+        Color restartTextColor = hoverRestart ? TEXT_HOVER : TEXT_NORMAL;
+        Color mainMenuTextColor = hoverMainMenu ? TEXT_HOVER : TEXT_NORMAL;
+
+        DrawRectangleRec(restartBtn, restartBtnColor);
+        DrawRectangleRec(mainMenuBtn, mainMenuBtnColor);
+        DrawRectangleLinesEx(restartBtn, 2, BLACK);
+        DrawRectangleLinesEx(mainMenuBtn, 2, BLACK);
+
+        int buttonFontSize = 20;
+        int restartTextWidth = MeasureText("Restart", buttonFontSize);
+        int mainMenuTextWidth = MeasureText("Main Menu", buttonFontSize);
+        DrawText("Restart", static_cast<int>(restartBtn.x + (restartBtn.width - restartTextWidth) / 2),
+            static_cast<int>(restartBtn.y + (restartBtn.height - buttonFontSize) / 2), buttonFontSize, restartTextColor);
+        DrawText("Main Menu", static_cast<int>(mainMenuBtn.x + (mainMenuBtn.width - mainMenuTextWidth) / 2),
+            static_cast<int>(mainMenuBtn.y + (mainMenuBtn.height - buttonFontSize) / 2), buttonFontSize, mainMenuTextColor);
+
+        EndDrawing();
+    }
+
+
+    void UpdateGameOver(GameState& state)
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            Vector2 mousePos = GetMousePosition();
+            Rectangle restartBtn = { GAME_SCREEN_WIDTH / 2 - 160, 250, 150, 50 };
+            Rectangle mainMenuBtn = { GAME_SCREEN_WIDTH / 2 + 10, 250, 150, 50 };
+
+            if (CheckCollisionPointRec(mousePos, restartBtn))
+            {
+
+                InitGame(state);
+                state.currentScreen = ScreenState::GAMEPLAY;
+            }
+            else if (CheckCollisionPointRec(mousePos, mainMenuBtn))
+            {
+                state.currentScreen = ScreenState::MAIN_MENU;
+            }
+        }
+    }
+
+
 
 
     void ProcessCollisions(GameState& state)
@@ -298,10 +368,8 @@ namespace game
                     state.shieldRadius, state.sideEnemies[i].rect))
                 {
                     state.sideEnemies[i].active = false;
-
-                    state.sideEnemyRespawnTimers[i] = static_cast<float>(GetRandomValue(5, 10));
+                    state.sideEnemyRespawnTimers[i] = 5.0f;
                     state.localGameScore += SCORE_INCREMENT_ENEMY;
-                    state.activeSideEnemies--;
                 }
                 else if (CheckCollisionCircleRec({ state.player.x, state.player.y },
                     state.player.radius, state.sideEnemies[i].rect))
@@ -357,61 +425,73 @@ namespace game
 
             if (state.currentScreen == ScreenState::EXIT)
                 break;
-
-            switch (state.currentScreen)
+            if (state.gameOver)
             {
-            case ScreenState::MAIN_MENU:
-                menu::UpdateMainMenu(state);
-                menu::RenderMainMenu(state);
-                break;
-
-            case ScreenState::GAMEPLAY:
-                if (IsKeyPressed(KEY_P) || IsKeyPressed(KEY_ESCAPE))
+                UpdateGameOver(state);
+                if (state.currentScreen == ScreenState::MAIN_MENU)
                 {
-                    state.previousScreen = ScreenState::GAMEPLAY;
-                    state.currentScreen = ScreenState::PAUSE_MENU;
+                    state.gameOver = false;
                 }
-
-                if (!state.gameOver)
-                {
-                    UpdateGame(state, deltaTime);
-                    ProcessCollisions(state);
-                }
-                else if (IsKeyPressed(KEY_R))
-                {
-                    InitGame(state);
-                    state.currentScreen = ScreenState::GAMEPLAY;
-                }
-                RenderFrame(state);
-                break;
-
-            case ScreenState::PAUSE_MENU:
-                menu::UpdatePauseMenu(state);
-                menu::RenderPauseMenu(state);
-                break;
-
-            case ScreenState::OPTIONS:
-                menu::UpdateSubMenu(state);
-                menu::RenderSubMenu(state, "OPTIONS", "Settings can be configured here.");
-                break;
-
-            case ScreenState::INSTRUCTIONS:
-                menu::UpdateSubMenu(state);
-                menu::RenderSubMenu(state, "INSTRUCTIONS",
-                    "Use arrows or A/D to move,\n"
-                    "mouse to select options, and ESC to go back.\n"
-                    "P: Pause/Resume");
-                break;
-
-            case ScreenState::CREDITS:
-                menu::UpdateSubMenu(state);
-                menu::RenderSubMenu(state, "CREDITS",
-                    "Developed by: Leonardo Brizuela.\n Game version: v0.2");
-                break;
-
-            default:
-                break;
+                RenderGameOver(state);
             }
+            else
+            {
+                switch (state.currentScreen)
+                {
+                case ScreenState::MAIN_MENU:
+                    menu::UpdateMainMenu(state);
+                    menu::RenderMainMenu(state);
+                    break;
+
+                case ScreenState::GAMEPLAY:
+                    if (IsKeyPressed(KEY_P) || IsKeyPressed(KEY_ESCAPE))
+                    {
+                        state.previousScreen = ScreenState::GAMEPLAY;
+                        state.currentScreen = ScreenState::PAUSE_MENU;
+                    }
+
+                    if (!state.gameOver)
+                    {
+                        UpdateGame(state, deltaTime);
+                        ProcessCollisions(state);
+                    }
+                    else if (IsKeyPressed(KEY_R))
+                    {
+                        InitGame(state);
+                        state.currentScreen = ScreenState::GAMEPLAY;
+                    }
+                    RenderFrame(state);
+                    break;
+
+                case ScreenState::PAUSE_MENU:
+                    menu::UpdatePauseMenu(state);
+                    menu::RenderPauseMenu(state);
+                    break;
+
+                case ScreenState::OPTIONS:
+                    menu::UpdateSubMenu(state);
+                    menu::RenderSubMenu(state, "OPTIONS", "Settings can be configured here.");
+                    break;
+
+                case ScreenState::INSTRUCTIONS:
+                    menu::UpdateSubMenu(state);
+                    menu::RenderSubMenu(state, "INSTRUCTIONS",
+                        "Use arrows or A/D to move,\n"
+                        "mouse to select options, and ESC to go back.\n"
+                        "P: Pause/Resume");
+                    break;
+
+                case ScreenState::CREDITS:
+                    menu::UpdateSubMenu(state);
+                    menu::RenderSubMenu(state, "CREDITS",
+                        "Developed by: Leonardo Brizuela.\n Game version: v0.2");
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
         }
 
         resource::UnloadResources();
