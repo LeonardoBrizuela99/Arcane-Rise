@@ -48,15 +48,14 @@ namespace game
                 scale = 2.5f;  
             }
 
-            // Definir el rectángulo fuente
             Rectangle source = { 0, 0, static_cast<float>(tex.width), static_cast<float>(tex.height) };
-
             
             float newWidth = powerUp.rect.width * scale;
             float newHeight = powerUp.rect.height * scale;
 
             
-            Rectangle dest = {
+            Rectangle dest = 
+            {
                 powerUp.rect.x + (powerUp.rect.width - newWidth) / 2,
                 powerUp.rect.y + (powerUp.rect.height - newHeight) / 2,
                 newWidth,
@@ -67,25 +66,15 @@ namespace game
             DrawTexturePro(tex, source, dest, { 0, 0 }, 0.0f, WHITE);
 
             
-            DrawRectangleLines(
+          /*  DrawRectangleLines(
                 static_cast<int>(powerUp.rect.x),
                 static_cast<int>(powerUp.rect.y),
                 static_cast<int>(powerUp.rect.width),
                 static_cast<int>(powerUp.rect.height),
                 RED
-            );
+            );*/
         }
     }
-
-
-
-  /*  void DrawPowerUp(const PowerUp& powerUp)
-    {
-        if (powerUp.active)
-        {
-            Color color = (powerUp.type == PowerUpType::SHIELD) ? GREEN : YELLOW;
-        }
-    }*/
 
     void ResetPowerUp(PowerUp& powerUp, int screenWidth)
     {

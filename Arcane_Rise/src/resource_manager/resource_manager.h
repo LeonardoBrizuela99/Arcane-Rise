@@ -10,7 +10,8 @@ namespace resource
 
 
     extern Texture2D backgroundTexture;
-    extern Texture2D playerTexture;
+    extern Texture2D playerTexture1;
+    extern Texture2D playerTexture2;
     extern Texture2D obstacleTexture;
     extern Texture2D enemyTexture;
     extern Texture2D sideEnemyTexture1;

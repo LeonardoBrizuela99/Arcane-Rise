@@ -27,13 +27,39 @@ namespace game
             player.x = GAME_SCREEN_WIDTH - player.radius;
     }
 
+
     void DrawPlayer(const Player& player)
-    {
-        DrawCircle(static_cast<int>(player.x), static_cast<int>(player.y), player.radius, BLUE);
+    {    
+        bool movingLeft = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
+        bool movingRight = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
+        Texture2D tex;
+       
+        if (movingLeft || movingRight)
+        {
+            float t = static_cast<float>(GetTime());
+            int frame = ((int)(t * 4)) % 2;  // Alterna cada 0.25 seg
+            tex = (frame == 0) ? resource::playerTexture1 : resource::playerTexture2;
+        }
+        else
+        {           
+            tex = resource::playerTexture1;
+        }
+       
+        bool flip = movingRight; 
+        Rectangle source = { 0, 0, static_cast<float>(tex.width), static_cast<float>(tex.height) };
+
+        if (flip)
+        {
+            source.width = -source.width;  
+        }    
+        float scale = 1.7f;  
+        Rectangle dest = { player.x, player.y, static_cast<float>(tex.width) * scale, static_cast<float>(tex.height) * scale };      
+        Vector2 origin = { static_cast<float>(tex.width) * scale / 2.0f, static_cast<float>(tex.height) * scale / 2.0f };     
+        DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
     }
 
-    void UpdateShieldPosition(const Player& player, float distance, float& shieldX, float& shieldY)
-    {
+     void UpdateShieldPosition(const Player& player, float distance, float& shieldX, float& shieldY)
+     {
         const float MIN_SHIELD_ANGLE = -PI;
         const float MAX_SHIELD_ANGLE = 0.0f;
         float mouseX = static_cast<float>(GetMouseX());
@@ -53,7 +79,7 @@ namespace game
 
         shieldX = player.x + distance * static_cast<float>(cos(angle));
         shieldY = player.y + distance * static_cast<float>(sin(angle));
-    }
+     }
 
 
     void DrawShield(float shieldX, float shieldY, float shieldRadius)

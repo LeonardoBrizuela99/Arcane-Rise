@@ -5,7 +5,8 @@ namespace resource {
 
     Texture2D backgroundTexture = { 0 };
 
-    Texture2D playerTexture = { 0 };
+    Texture2D playerTexture1 = { 0 };
+    Texture2D playerTexture2 = { 0 };
     Texture2D obstacleTexture = { 0 };
     Texture2D enemyTexture = { 0 };
   
@@ -25,7 +26,8 @@ namespace resource {
 
     void LoadResources() {
 
-        playerTexture = LoadTexture("../../res/textures/player.png");
+        playerTexture1 = LoadTexture("../../res/textures/player1.png");
+        playerTexture2 = LoadTexture("../../res/textures/player2.png");
         obstacleTexture = LoadTexture("../../res/textures/bola_de_fuego.png");
         sideEnemyTexture1 = LoadTexture("../../res/textures/skeleton_1.png");        
         sideEnemyTexture2 = LoadTexture("../../res/textures/skeleton_2.png");        
@@ -49,7 +51,8 @@ namespace resource {
     void UnloadResources()
     {
 
-        UnloadTexture(playerTexture);
+        UnloadTexture(playerTexture1);
+        UnloadTexture(playerTexture2);
         UnloadTexture(obstacleTexture);
         UnloadTexture(enemyTexture);
         
