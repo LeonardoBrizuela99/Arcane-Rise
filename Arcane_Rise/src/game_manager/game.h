@@ -25,7 +25,7 @@ namespace game
     const int MAX_OBSTACLES = 20;
     const int MAX_ENEMIES = 5;
 
-    const int SCORE_INCREMENT_OBSTACLE = 20;
+    const int SCORE_INCREMENT_OBSTACLE = 1020;
     const int SCORE_INCREMENT_ENEMY = 50;
     const int SCORE_INCREMENT_POWERUP = 100;
 

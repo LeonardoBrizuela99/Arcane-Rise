@@ -14,7 +14,8 @@ namespace resource
     extern Texture2D obstacleTexture;
     extern Texture2D enemyTexture;
     extern Texture2D powerUpTexture;
-    extern Texture2D sideEnemyTexture;
+    extern Texture2D sideEnemyTexture1;
+    extern Texture2D sideEnemyTexture2;
     extern Texture2D buttonTexture;
     extern Texture2D shieldTexture;
     extern Texture2D gameBackgroundTexture;

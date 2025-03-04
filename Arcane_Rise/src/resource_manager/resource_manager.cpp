@@ -9,7 +9,8 @@ namespace resource {
     Texture2D obstacleTexture = { 0 };
     Texture2D enemyTexture = { 0 };
     Texture2D powerUpTexture = { 0 };
-    Texture2D sideEnemyTexture = { 0 };
+    Texture2D sideEnemyTexture1 = { 0 };
+    Texture2D sideEnemyTexture2 = { 0 };
     Texture2D buttonTexture = { 0 };
     Texture2D shieldTexture = { 0 };
     Texture2D gameBackgroundTexture={0};
@@ -23,9 +24,10 @@ namespace resource {
 
         playerTexture = LoadTexture("../../res/textures/player.png");
         obstacleTexture = LoadTexture("../../res/textures/bola_de_fuego.png");
+        sideEnemyTexture1 = LoadTexture("../../res/textures/skeleton_1.png");        
+        sideEnemyTexture2 = LoadTexture("../../res/textures/skeleton_2.png");        
         enemyTexture = LoadTexture("resources/enemy.png");
         powerUpTexture = LoadTexture("resources/powerup.png");
-        sideEnemyTexture = LoadTexture("resources/side_enemy.png");
         buttonTexture = LoadTexture("../../res/textures/button.png");
         backgroundTexture = LoadTexture("../../res/textures/main_menu.png");
         shieldTexture = LoadTexture("../../res/textures/escudo.png");
@@ -47,7 +49,8 @@ namespace resource {
         UnloadTexture(obstacleTexture);
         UnloadTexture(enemyTexture);
         UnloadTexture(powerUpTexture);
-        UnloadTexture(sideEnemyTexture);
+        UnloadTexture(sideEnemyTexture1);
+        UnloadTexture(sideEnemyTexture2);
         UnloadTexture(buttonTexture);
         UnloadTexture(backgroundTexture);
         UnloadTexture(shieldTexture);

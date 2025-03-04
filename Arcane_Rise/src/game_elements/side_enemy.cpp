@@ -1,5 +1,6 @@
 #include "side_enemy.h"
 #include "game_manager/game.h"
+#include"resource_manager/resource_manager.h"
 #include "raylib.h"
 #include <cstdlib>
 
@@ -66,12 +67,47 @@ namespace game
 
     void DrawSideEnemies(const SideEnemy sideEnemies[], int count)
     {
+
+        float offsetX = 26.0f;
+        float offsetY = 10.0f;
+        float scaleX = 2.5f;
+        float scaleY = 2.5f;
+
         for (int i = 0; i < count; i++)
         {
             if (sideEnemies[i].active)
             {
-                DrawRectangleRec(sideEnemies[i].rect, ORANGE);
+                float t = static_cast<float>(GetTime());
+                int frame = ((int)(t * 4)) % 2;
+
+                Texture2D tex = (frame == 0) ? resource::sideEnemyTexture1 : resource::sideEnemyTexture2;
+
+                Rectangle source = { 0, 0, static_cast<float>(tex.width), static_cast<float>(tex.height) };
+
+
+                float newWidth = sideEnemies[i].rect.width * scaleX;
+                float newHeight = sideEnemies[i].rect.height * scaleY;
+
+                Rectangle dest = {
+                    sideEnemies[i].rect.x + (sideEnemies[i].rect.width - newWidth) / 2 + offsetX,
+                    sideEnemies[i].rect.y + (sideEnemies[i].rect.height - newHeight) / 2 + offsetY,
+                    newWidth,
+                    newHeight
+                };
+
+                Vector2 origin = { newWidth / 2, newHeight / 2 };
+
+                if (sideEnemies[i].direction == -1)
+                {
+                    source.width = -source.width;
+                }
+
+                //DrawRectangleRec(sideEnemies[i].rect, ORANGE);
+                DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
             }
         }
     }
+
+
+
 }
