@@ -386,7 +386,8 @@ namespace game
     void RenderFrame(const GameState& state)
     {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+       
+        DrawTexture(resource::gameBackgroundTexture,0,0,WHITE);
 
         DrawPlayer(state.player);
         DrawShield(state.shieldX, state.shieldY, state.shieldRadius);

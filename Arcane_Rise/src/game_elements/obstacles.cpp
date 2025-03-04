@@ -1,4 +1,5 @@
 #include "game_manager/game.h" 
+#include"resource_manager/resource_manager.h"
 #include "obstacles.h"
 #include "raylib.h"
 #include <cstdlib>
@@ -42,10 +43,41 @@ namespace game
         {
             if (obstacles[i].active)
             {
-                DrawRectangleRec(obstacles[i].rect, RED);
+                // Definir el rectángulo de la textura (se usará la imagen completa)
+                Rectangle source = { 0, 0, static_cast<float>(resource::obstacleTexture.width), static_cast<float>(resource::obstacleTexture.height) };
+
+                // Factor de escala (por ejemplo, aumentar un 20%)
+                float scaleFactor = 1.5f;
+
+                // Nuevo tamaño del obstáculo
+                float newWidth = obstacles[i].rect.width * scaleFactor;
+                float newHeight = obstacles[i].rect.height * scaleFactor;
+
+                // Ajustar la posición para mantener el centro
+                Rectangle dest = {
+                    obstacles[i].rect.x - (newWidth - obstacles[i].rect.width) / 2,
+                    obstacles[i].rect.y - (newHeight - obstacles[i].rect.height) / 2,
+                    newWidth,
+                    newHeight
+                };
+
+                Vector2 origin = { 0, 0 };  // Origen en la esquina superior izquierda
+                DrawTexturePro(resource::obstacleTexture, source, dest, origin, 0.0f, WHITE);
             }
         }
     }
+
+
+    /*void DrawObstacles(const Obstacle obstacles[], int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (obstacles[i].active)
+            {
+                DrawRectangleRec(obstacles[i].rect, RED);
+            }
+        }
+    }*/
 
     void ResetObstacle(Obstacle& obstacle, int screenWidth)
     {

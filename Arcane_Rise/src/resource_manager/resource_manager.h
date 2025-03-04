@@ -17,6 +17,7 @@ namespace resource
     extern Texture2D sideEnemyTexture;
     extern Texture2D buttonTexture;
     extern Texture2D shieldTexture;
+    extern Texture2D gameBackgroundTexture;
 
     extern Sound shieldSound;
     extern Sound explosionSound;
