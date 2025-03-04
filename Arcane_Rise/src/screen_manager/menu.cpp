@@ -50,15 +50,21 @@ namespace menu {
 
     void UpdateMainMenu(game::GameState& state)
     {
+        // Asegurarse de inicializar las opciones del menú solo una vez.
         if (!mainMenuInitialized)
             InitMainMenuOptions();
 
         Vector2 mousePos = GetMousePosition();
-
-        for (int i = 0; i < MAIN_MENU_OPTION_COUNT; i++) {
-            if (CheckCollisionPointRec(mousePos, mainMenuOptions[i].rect)) {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    switch (i) {
+        for (int i = 0; i < MAIN_MENU_OPTION_COUNT; i++)
+        {
+            if (CheckCollisionPointRec(mousePos, mainMenuOptions[i].rect))
+            {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    // Reproducir sonido de selección
+                    PlaySound(resource::select);
+                    switch (i)
+                    {
                     case 0:
                         game::InitGame(state);
                         state.currentScreen = game::ScreenState::GAMEPLAY;
@@ -85,6 +91,8 @@ namespace menu {
             }
         }
     }
+
+    
 
 
     void RenderMainMenu(const game::GameState&) {
@@ -139,6 +147,8 @@ namespace menu {
         for (int i = 0; i < PAUSE_MENU_OPTION_COUNT; i++) {
             if (CheckCollisionPointRec(mousePos, pauseMenuOptions[i].rect)) {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    // Se reproduce el sonido de selección
+                    PlaySound(resource::select);
                     switch (i) {
                     case 0:
                         state.currentScreen = game::ScreenState::GAMEPLAY;
@@ -165,6 +175,7 @@ namespace menu {
             }
         }
     }
+
 
 
     void RenderPauseMenu(const game::GameState&) {
@@ -197,16 +208,20 @@ namespace menu {
 
     void UpdateSubMenu(game::GameState& state)
     {
-
         if (IsKeyPressed(KEY_ESCAPE))
             state.currentScreen = state.previousScreen;
 
         const int backBtnWidth = 150;
         const int backBtnHeight = 50;
-        Rectangle backButton = { 20, 600 - backBtnHeight - 20, backBtnWidth, backBtnHeight };
+        Rectangle backButton = { 20,  600- backBtnHeight - 20, backBtnWidth, backBtnHeight };
+
         if (CheckCollisionPointRec(GetMousePosition(), backButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            PlaySound(resource::select);
             state.currentScreen = state.previousScreen;
+        }
     }
+
 
 
     void RenderSubMenu(const game::GameState&, const char title[], const char info[]) {

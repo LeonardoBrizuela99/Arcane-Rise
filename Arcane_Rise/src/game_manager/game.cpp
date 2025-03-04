@@ -275,24 +275,41 @@ namespace game
 
     void UpdateGameOver(GameState& state)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        // Variable estática para asegurarse de que se reproduzca el sonido solo una vez por clic
+        static bool selectionSoundPlayed = false;
+
+        // Verifica si el botón del mouse está presionado
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
-            Vector2 mousePos = GetMousePosition();
-            Rectangle restartBtn = { GAME_SCREEN_WIDTH / 2 - 160, 250, 150, 50 };
-            Rectangle mainMenuBtn = { GAME_SCREEN_WIDTH / 2 + 10, 250, 150, 50 };
-
-            if (CheckCollisionPointRec(mousePos, restartBtn))
+            // Solo si no se ha reproducido el sonido ya durante este clic
+            if (!selectionSoundPlayed)
             {
+                Vector2 mousePos = GetMousePosition();
+                Rectangle restartBtn = { GAME_SCREEN_WIDTH / 2 - 160, 250, 150, 50 };
+                Rectangle mainMenuBtn = { GAME_SCREEN_WIDTH / 2 + 10, 250, 150, 50 };
 
-                InitGame(state);
-                state.currentScreen = ScreenState::GAMEPLAY;
-            }
-            else if (CheckCollisionPointRec(mousePos, mainMenuBtn))
-            {
-                state.currentScreen = ScreenState::MAIN_MENU;
+                if (CheckCollisionPointRec(mousePos, restartBtn))
+                {
+                    PlaySound(resource::select);
+                    selectionSoundPlayed = true;
+                    InitGame(state);
+                    state.currentScreen = ScreenState::GAMEPLAY;
+                }
+                else if (CheckCollisionPointRec(mousePos, mainMenuBtn))
+                {
+                    PlaySound(resource::select);
+                    selectionSoundPlayed = true;
+                    state.currentScreen = ScreenState::MAIN_MENU;
+                }
             }
         }
+        else
+        {
+            // Cuando se suelte el botón, se permite reproducir el sonido en el siguiente clic
+            selectionSoundPlayed = false;
+        }
     }
+
 
 
 

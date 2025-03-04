@@ -23,7 +23,10 @@ namespace resource
 
     extern Sound shieldSound;
     extern Sound explosionSound;
-    extern Sound powerUpSound;
+   
+    extern Sound select;
+    extern Sound pop;
+    extern Sound powerUp;
 
 
     void LoadResources();

@@ -22,7 +22,9 @@ namespace resource {
 
     Sound shieldSound = { 0 };
     Sound explosionSound = { 0 };
-    Sound powerUpSound = { 0 };
+    Sound powerUp= { 0 };
+    Sound pop= { 0 };
+    Sound select= { 0 };
 
     void LoadResources() 
     {
@@ -46,7 +48,8 @@ namespace resource {
 
         shieldSound = LoadSound("resources/shield.wav");
         explosionSound = LoadSound("resources/explosion.wav");
-        powerUpSound = LoadSound("resources/powerup.wav");
+       
+        select =LoadSound("../../res/sounds/select.wav");
     }
 
     void UnloadResources()
@@ -69,7 +72,8 @@ namespace resource {
 
         UnloadSound(shieldSound);
         UnloadSound(explosionSound);
-        UnloadSound(powerUpSound);
+       
+        UnloadSound(select);
 
         CloseAudioDevice();
     }
