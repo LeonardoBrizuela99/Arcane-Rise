@@ -50,7 +50,7 @@ namespace resource {
 
 
         shieldSound = LoadSound("resources/shield.wav");
-        explosionSound = LoadSound("resources/explosion.wav");
+       powerUp = LoadSound("../../res/sounds/power_up.wav");
 
         select = LoadSound("../../res/sounds/select.wav");
 
@@ -79,7 +79,7 @@ namespace resource {
         UnloadTexture(powerUpShieldTexture);
 
         UnloadSound(shieldSound);
-        UnloadSound(explosionSound);       
+        UnloadSound(powerUp);       
         UnloadSound(select);
 
         UnloadMusicStream(menuSong);

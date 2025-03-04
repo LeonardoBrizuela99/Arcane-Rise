@@ -290,7 +290,7 @@ namespace game
                     selectionSoundPlayed = true;
                     InitGame(state);
                     state.currentScreen = ScreenState::GAMEPLAY;
-                    // Detener la música de Game Over y reiniciar la música del juego:
+                    
                     StopMusicStream(resource::gameOverSong);
                     SeekMusicStream(resource::gameSong, 0.0f);
                     PlayMusicStream(resource::gameSong);
@@ -301,7 +301,7 @@ namespace game
                     selectionSoundPlayed = true;
                     state.currentScreen = ScreenState::MAIN_MENU;
                     state.gameOver = false;
-                    // Detener la música de Game Over y reiniciar la música del menú:
+                    
                     StopMusicStream(resource::gameOverSong);
                     SeekMusicStream(resource::menuSong, 0.0f);
                     PlayMusicStream(resource::menuSong);
@@ -336,7 +336,7 @@ namespace game
                     state.player.radius, state.obstacles[i].rect))
                 {
                     state.gameOver = true;
-                    // Detener la música del juego y reproducir la de Game Over
+                   
                     StopMusicStream(resource::gameSong);
                     PlayMusicStream(resource::gameOverSong);
                     return;
@@ -365,7 +365,7 @@ namespace game
             }
         }
 
-        // Similar para powerUp y sideEnemies (para sideEnemies, ya tienes lo mismo)
+       
         if (state.powerUp.active)
         {
             if (CheckCollisionCircleRec({ state.player.x, state.player.y },
@@ -373,6 +373,7 @@ namespace game
                 CheckCollisionCircleRec({ state.shieldX, state.shieldY },
                     state.shieldRadius, state.powerUp.rect))
             {
+                PlaySound(resource::powerUp);
                 switch (state.powerUp.type)
                 {
                 case PowerUpType::SHIELD:
@@ -452,7 +453,7 @@ namespace game
 
         ScreenState lastScreen = state.currentScreen;
 
-        // Iniciar la música según el estado inicial
+        
         if (state.currentScreen == ScreenState::MAIN_MENU ||
             state.currentScreen == ScreenState::OPTIONS ||
             state.currentScreen == ScreenState::INSTRUCTIONS ||
@@ -476,7 +477,7 @@ namespace game
         {
             float deltaTime = GetFrameTime();
 
-            // Actualizar música dependiendo del estado (si no estamos en Game Over)
+          
             if (!state.gameOver)
             {
                 if (state.currentScreen == ScreenState::MAIN_MENU ||
@@ -501,17 +502,17 @@ namespace game
                         SeekMusicStream(resource::pauseSong, 0.0f);
                 }
             }
-            else // Estado Game Over
+            else 
             {
                 UpdateMusicStream(resource::gameOverSong);
-                // Si ya se ha reproducido la totalidad de la canción, detenemos la reproducción para evitar que se reinicie
+             
                 if (GetMusicTimePlayed(resource::gameOverSong) >= GetMusicTimeLength(resource::gameOverSong))
                 {
                     StopMusicStream(resource::gameOverSong);
                 }
             }
 
-            // Detectar cambio de estado y reiniciar la música correspondiente
+          
             if (state.currentScreen != lastScreen)
             {
                 StopMusicStream(resource::menuSong);
@@ -521,7 +522,7 @@ namespace game
 
                 if (state.gameOver)
                 {
-                    // Reiniciamos y reproducimos la canción de Game Over desde el inicio
+                    
                     SeekMusicStream(resource::gameOverSong, 0.0f);
                     PlayMusicStream(resource::gameOverSong);
                 }
@@ -545,9 +546,7 @@ namespace game
                 }
                 lastScreen = state.currentScreen;
             }
-
-
-            // Procesamiento del estado del juego
+           
             if (state.currentScreen == ScreenState::EXIT)
                 break;
 
