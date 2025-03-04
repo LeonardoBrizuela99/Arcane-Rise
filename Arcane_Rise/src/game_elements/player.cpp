@@ -37,7 +37,7 @@ namespace game
         if (movingLeft || movingRight)
         {
             float t = static_cast<float>(GetTime());
-            int frame = ((int)(t * 4)) % 2;  // Alterna cada 0.25 seg
+            int frame = ((int)(t * 4)) % 2; 
             tex = (frame == 0) ? resource::playerTexture1 : resource::playerTexture2;
         }
         else
@@ -88,6 +88,6 @@ namespace game
         Rectangle dest = { shieldX - shieldRadius, shieldY - shieldRadius, shieldRadius * 2, shieldRadius * 2 };
         
         DrawTexturePro(resource::shieldTexture, source, dest, { 0, 0 }, 0.0f, WHITE);
-        //DrawCircle(static_cast<int>(shieldX), static_cast<int>(shieldY), shieldRadius, DARKBLUE);
+       
     }
 }

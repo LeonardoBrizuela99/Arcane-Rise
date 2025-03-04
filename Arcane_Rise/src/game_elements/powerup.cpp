@@ -60,19 +60,8 @@ namespace game
                 powerUp.rect.y + (powerUp.rect.height - newHeight) / 2,
                 newWidth,
                 newHeight
-            };
-
-            
-            DrawTexturePro(tex, source, dest, { 0, 0 }, 0.0f, WHITE);
-
-            
-          /*  DrawRectangleLines(
-                static_cast<int>(powerUp.rect.x),
-                static_cast<int>(powerUp.rect.y),
-                static_cast<int>(powerUp.rect.width),
-                static_cast<int>(powerUp.rect.height),
-                RED
-            );*/
+            };           
+            DrawTexturePro(tex, source, dest, { 0, 0 }, 0.0f, WHITE);     
         }
     }
 

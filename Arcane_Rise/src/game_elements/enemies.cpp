@@ -1,4 +1,5 @@
 #include "game_manager/game.h"  
+#include "resource_manager/resource_manager.h"
 #include "enemies.h"
 #include "raylib.h"
 #include <cstdlib>
@@ -48,14 +49,26 @@ namespace game
             }
         }
     }
-
     void DrawEnemies(const Enemies enemies[], int count)
     {
         for (int i = 0; i < count; i++)
         {
             if (enemies[i].active)
-            {
-                DrawRectangleRec(enemies[i].rect, PURPLE);
+            {               
+                Rectangle source = { 0, 0, static_cast<float>(resource::enemyTexture.width), static_cast<float>(resource::enemyTexture.height) };             
+                float scaleFactor = 2.5f;  
+                float newWidth = enemies[i].rect.width * scaleFactor;
+                float newHeight = enemies[i].rect.height * scaleFactor;              
+                Rectangle dest =
+                {
+                    enemies[i].rect.x - (newWidth - enemies[i].rect.width) / 2,
+                    enemies[i].rect.y - (newHeight - enemies[i].rect.height) / 2,
+                    newWidth,
+                    newHeight
+                };
+
+                Vector2 origin = { 0, 0 };              
+                DrawTexturePro(resource::enemyTexture, source, dest, origin, 0.0f, WHITE);
             }
         }
     }

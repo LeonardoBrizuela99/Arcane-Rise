@@ -98,8 +98,7 @@ namespace game
                 if (sideEnemies[i].direction == -1)
                 {
                     source.width = -source.width;
-                }
-                //DrawRectangleRec(sideEnemies[i].rect, ORANGE);
+                }               
                 DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
             }
         }

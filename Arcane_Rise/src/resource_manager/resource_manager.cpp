@@ -24,14 +24,15 @@ namespace resource {
     Sound explosionSound = { 0 };
     Sound powerUpSound = { 0 };
 
-    void LoadResources() {
+    void LoadResources() 
+    {
 
         playerTexture1 = LoadTexture("../../res/textures/player1.png");
         playerTexture2 = LoadTexture("../../res/textures/player2.png");
         obstacleTexture = LoadTexture("../../res/textures/bola_de_fuego.png");
         sideEnemyTexture1 = LoadTexture("../../res/textures/skeleton_1.png");        
         sideEnemyTexture2 = LoadTexture("../../res/textures/skeleton_2.png");        
-        enemyTexture = LoadTexture("resources/enemy.png");
+        enemyTexture = LoadTexture("../../res/textures/enemy.png");
         powerUpShieldTexture = LoadTexture("../../res/textures/escudo_power.png");
         powerUpSpeedTexture = LoadTexture("../../res/textures/speed.png");
        

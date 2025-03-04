@@ -59,19 +59,7 @@ namespace game
             }
         }
     }
-
-
-    /*void DrawObstacles(const Obstacle obstacles[], int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            if (obstacles[i].active)
-            {
-                DrawRectangleRec(obstacles[i].rect, RED);
-            }
-        }
-    }*/
-
+  
     void ResetObstacle(Obstacle& obstacle, int screenWidth)
     {
         obstacle.rect.y = -30.0f;
