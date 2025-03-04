@@ -1,4 +1,5 @@
 #include "game_manager/game.h"  
+#include "resource_manager/resource_manager.h"
 #include "powerup.h"
 #include <cstdlib>
 
@@ -28,15 +29,63 @@ namespace game
             }
         }
     }
-
     void DrawPowerUp(const PowerUp& powerUp)
     {
         if (powerUp.active)
         {
-            Color color = (powerUp.type == PowerUpType::SHIELD) ? GREEN : YELLOW;
-            DrawRectangleRec(powerUp.rect, color);
+          
+            Texture2D tex;
+            float scale = 1.0f;  
+
+            if (powerUp.type == PowerUpType::SHIELD)
+            {
+                tex = resource::powerUpShieldTexture;
+                scale = 2.0f; 
+            }
+            else
+            {
+                tex = resource::powerUpSpeedTexture;
+                scale = 2.5f;  
+            }
+
+            // Definir el rectángulo fuente
+            Rectangle source = { 0, 0, static_cast<float>(tex.width), static_cast<float>(tex.height) };
+
+            
+            float newWidth = powerUp.rect.width * scale;
+            float newHeight = powerUp.rect.height * scale;
+
+            
+            Rectangle dest = {
+                powerUp.rect.x + (powerUp.rect.width - newWidth) / 2,
+                powerUp.rect.y + (powerUp.rect.height - newHeight) / 2,
+                newWidth,
+                newHeight
+            };
+
+            
+            DrawTexturePro(tex, source, dest, { 0, 0 }, 0.0f, WHITE);
+
+            
+            DrawRectangleLines(
+                static_cast<int>(powerUp.rect.x),
+                static_cast<int>(powerUp.rect.y),
+                static_cast<int>(powerUp.rect.width),
+                static_cast<int>(powerUp.rect.height),
+                RED
+            );
         }
     }
+
+
+
+  /*  void DrawPowerUp(const PowerUp& powerUp)
+    {
+        if (powerUp.active)
+        {
+            Color color = (powerUp.type == PowerUpType::SHIELD) ? GREEN : YELLOW;
+        }
+    }*/
 
     void ResetPowerUp(PowerUp& powerUp, int screenWidth)
     {

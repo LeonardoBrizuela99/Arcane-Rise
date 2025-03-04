@@ -8,12 +8,15 @@ namespace resource {
     Texture2D playerTexture = { 0 };
     Texture2D obstacleTexture = { 0 };
     Texture2D enemyTexture = { 0 };
-    Texture2D powerUpTexture = { 0 };
+  
     Texture2D sideEnemyTexture1 = { 0 };
     Texture2D sideEnemyTexture2 = { 0 };
-    Texture2D buttonTexture = { 0 };
+    
     Texture2D shieldTexture = { 0 };
     Texture2D gameBackgroundTexture={0};
+    Texture2D powerUpShieldTexture = { 0 };
+    Texture2D powerUpSpeedTexture = { 0 };
+    
 
 
     Sound shieldSound = { 0 };
@@ -27,8 +30,9 @@ namespace resource {
         sideEnemyTexture1 = LoadTexture("../../res/textures/skeleton_1.png");        
         sideEnemyTexture2 = LoadTexture("../../res/textures/skeleton_2.png");        
         enemyTexture = LoadTexture("resources/enemy.png");
-        powerUpTexture = LoadTexture("resources/powerup.png");
-        buttonTexture = LoadTexture("../../res/textures/button.png");
+        powerUpShieldTexture = LoadTexture("../../res/textures/escudo_power.png");
+        powerUpSpeedTexture = LoadTexture("../../res/textures/speed.png");
+       
         backgroundTexture = LoadTexture("../../res/textures/main_menu.png");
         shieldTexture = LoadTexture("../../res/textures/escudo.png");
         gameBackgroundTexture = LoadTexture("../../res/textures/game_background.png");
@@ -48,13 +52,15 @@ namespace resource {
         UnloadTexture(playerTexture);
         UnloadTexture(obstacleTexture);
         UnloadTexture(enemyTexture);
-        UnloadTexture(powerUpTexture);
+        
         UnloadTexture(sideEnemyTexture1);
         UnloadTexture(sideEnemyTexture2);
-        UnloadTexture(buttonTexture);
+       
         UnloadTexture(backgroundTexture);
         UnloadTexture(shieldTexture);
         UnloadTexture(gameBackgroundTexture);
+        UnloadTexture(powerUpSpeedTexture);
+        UnloadTexture(powerUpShieldTexture);
 
 
         UnloadSound(shieldSound);

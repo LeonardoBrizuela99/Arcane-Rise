@@ -67,7 +67,6 @@ namespace game
 
     void DrawSideEnemies(const SideEnemy sideEnemies[], int count)
     {
-
         float offsetX = 26.0f;
         float offsetY = 10.0f;
         float scaleX = 2.5f;
@@ -81,14 +80,13 @@ namespace game
                 int frame = ((int)(t * 4)) % 2;
 
                 Texture2D tex = (frame == 0) ? resource::sideEnemyTexture1 : resource::sideEnemyTexture2;
-
                 Rectangle source = { 0, 0, static_cast<float>(tex.width), static_cast<float>(tex.height) };
-
 
                 float newWidth = sideEnemies[i].rect.width * scaleX;
                 float newHeight = sideEnemies[i].rect.height * scaleY;
 
-                Rectangle dest = {
+                Rectangle dest = 
+                {
                     sideEnemies[i].rect.x + (sideEnemies[i].rect.width - newWidth) / 2 + offsetX,
                     sideEnemies[i].rect.y + (sideEnemies[i].rect.height - newHeight) / 2 + offsetY,
                     newWidth,
@@ -101,13 +99,9 @@ namespace game
                 {
                     source.width = -source.width;
                 }
-
                 //DrawRectangleRec(sideEnemies[i].rect, ORANGE);
                 DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
             }
         }
     }
-
-
-
 }
