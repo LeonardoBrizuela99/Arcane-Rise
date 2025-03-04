@@ -329,6 +329,7 @@ namespace game
                 if (CheckCollisionCircleRec({ state.shieldX, state.shieldY },
                     state.shieldRadius, state.obstacles[i].rect))
                 {
+                    PlaySound(resource::pop);
                     ResetObstacle(state.obstacles[i], GAME_SCREEN_WIDTH);
                     state.localGameScore += SCORE_INCREMENT_OBSTACLE;
                 }
@@ -351,6 +352,7 @@ namespace game
                 if (CheckCollisionCircleRec({ state.shieldX, state.shieldY },
                     state.shieldRadius, state.enemies[i].rect))
                 {
+                    PlaySound(resource::pop);
                     ResetEnemies(state.enemies[i], GAME_SCREEN_WIDTH);
                     state.localGameScore += SCORE_INCREMENT_ENEMY;
                 }
@@ -374,6 +376,7 @@ namespace game
                     state.shieldRadius, state.powerUp.rect))
             {
                 PlaySound(resource::powerUp);
+               
                 switch (state.powerUp.type)
                 {
                 case PowerUpType::SHIELD:
@@ -397,6 +400,7 @@ namespace game
                 if (CheckCollisionCircleRec({ state.shieldX, state.shieldY },
                     state.shieldRadius, state.sideEnemies[i].rect))
                 {
+                    PlaySound(resource::pop);
                     state.sideEnemies[i].active = false;
                     state.sideEnemyRespawnTimers[i] = 5.0f;
                     state.localGameScore += SCORE_INCREMENT_ENEMY;

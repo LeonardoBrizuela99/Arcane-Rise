@@ -50,9 +50,10 @@ namespace resource {
 
 
         shieldSound = LoadSound("resources/shield.wav");
-       powerUp = LoadSound("../../res/sounds/power_up.wav");
+        powerUp = LoadSound("../../res/sounds/power_up.wav");
 
         select = LoadSound("../../res/sounds/select.wav");
+        pop = LoadSound("../../res/sounds/pop.wav");
 
         menuSong = LoadMusicStream("../../res/sounds/menuSong.wav");
         gameSong = LoadMusicStream("../../res/sounds/gameSong.wav");
@@ -78,7 +79,7 @@ namespace resource {
         UnloadTexture(powerUpSpeedTexture);
         UnloadTexture(powerUpShieldTexture);
 
-        UnloadSound(shieldSound);
+        UnloadSound(pop);
         UnloadSound(powerUp);       
         UnloadSound(select);
 
