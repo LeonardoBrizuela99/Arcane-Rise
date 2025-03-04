@@ -50,7 +50,7 @@ namespace menu {
 
     void UpdateMainMenu(game::GameState& state)
     {
-        // Asegurarse de inicializar las opciones del menú solo una vez.
+       
         if (!mainMenuInitialized)
             InitMainMenuOptions();
 
@@ -61,7 +61,7 @@ namespace menu {
             {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-                    // Reproducir sonido de selección
+                    
                     PlaySound(resource::select);
                     switch (i)
                     {
@@ -95,7 +95,8 @@ namespace menu {
     
 
 
-    void RenderMainMenu(const game::GameState&) {
+    void RenderMainMenu(const game::GameState&)
+    {
         BeginDrawing();
 
         DrawTexture(resource::backgroundTexture, 0, 0, WHITE);
@@ -147,7 +148,7 @@ namespace menu {
         for (int i = 0; i < PAUSE_MENU_OPTION_COUNT; i++) {
             if (CheckCollisionPointRec(mousePos, pauseMenuOptions[i].rect)) {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    // Se reproduce el sonido de selección
+                    
                     PlaySound(resource::select);
                     switch (i) {
                     case 0:
@@ -178,7 +179,8 @@ namespace menu {
 
 
 
-    void RenderPauseMenu(const game::GameState&) {
+    void RenderPauseMenu(const game::GameState&)
+    {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 

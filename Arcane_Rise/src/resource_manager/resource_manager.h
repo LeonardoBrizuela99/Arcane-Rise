@@ -28,6 +28,11 @@ namespace resource
     extern Sound pop;
     extern Sound powerUp;
 
+    extern Music menuSong;
+    extern Music gameSong;
+    extern Music pauseSong;
+    extern Music gameOverSong;
+
 
     void LoadResources();
     void UnloadResources();

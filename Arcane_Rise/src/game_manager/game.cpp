@@ -223,7 +223,6 @@ namespace game
 
     void RenderGameOver(const GameState& state)
     {
-
         static const Color BUTTON_NORMAL_BG = { 250, 235, 215, 255 };
         static const Color BUTTON_HOVER_BG = { 244, 164, 96, 255 };
         static const Color TEXT_NORMAL = BLACK;
@@ -231,7 +230,7 @@ namespace game
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-
+      
 
         int titleFontSize = 40;
         int titleWidth = MeasureText("GAME OVER", titleFontSize);
@@ -275,13 +274,10 @@ namespace game
 
     void UpdateGameOver(GameState& state)
     {
-        // Variable estática para asegurarse de que se reproduzca el sonido solo una vez por clic
         static bool selectionSoundPlayed = false;
 
-        // Verifica si el botón del mouse está presionado
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
-            // Solo si no se ha reproducido el sonido ya durante este clic
             if (!selectionSoundPlayed)
             {
                 Vector2 mousePos = GetMousePosition();
@@ -294,21 +290,31 @@ namespace game
                     selectionSoundPlayed = true;
                     InitGame(state);
                     state.currentScreen = ScreenState::GAMEPLAY;
+                    // Detener la música de Game Over y reiniciar la música del juego:
+                    StopMusicStream(resource::gameOverSong);
+                    SeekMusicStream(resource::gameSong, 0.0f);
+                    PlayMusicStream(resource::gameSong);
                 }
                 else if (CheckCollisionPointRec(mousePos, mainMenuBtn))
                 {
                     PlaySound(resource::select);
                     selectionSoundPlayed = true;
                     state.currentScreen = ScreenState::MAIN_MENU;
+                    state.gameOver = false;
+                    // Detener la música de Game Over y reiniciar la música del menú:
+                    StopMusicStream(resource::gameOverSong);
+                    SeekMusicStream(resource::menuSong, 0.0f);
+                    PlayMusicStream(resource::menuSong);
                 }
             }
         }
         else
         {
-            // Cuando se suelte el botón, se permite reproducir el sonido en el siguiente clic
             selectionSoundPlayed = false;
         }
     }
+
+
 
 
 
@@ -330,6 +336,9 @@ namespace game
                     state.player.radius, state.obstacles[i].rect))
                 {
                     state.gameOver = true;
+                    // Detener la música del juego y reproducir la de Game Over
+                    StopMusicStream(resource::gameSong);
+                    PlayMusicStream(resource::gameOverSong);
                     return;
                 }
             }
@@ -349,11 +358,14 @@ namespace game
                     state.player.radius, state.enemies[i].rect))
                 {
                     state.gameOver = true;
+                    StopMusicStream(resource::gameSong);
+                    PlayMusicStream(resource::gameOverSong);
                     return;
                 }
             }
         }
 
+        // Similar para powerUp y sideEnemies (para sideEnemies, ya tienes lo mismo)
         if (state.powerUp.active)
         {
             if (CheckCollisionCircleRec({ state.player.x, state.player.y },
@@ -392,12 +404,14 @@ namespace game
                     state.player.radius, state.sideEnemies[i].rect))
                 {
                     state.gameOver = true;
+                    StopMusicStream(resource::gameSong);
+                    PlayMusicStream(resource::gameOverSong);
                     return;
                 }
             }
         }
-
     }
+
 
 
     void RenderFrame(const GameState& state)
@@ -436,20 +450,110 @@ namespace game
         resource::LoadResources();
         InitGame(state);
 
+        ScreenState lastScreen = state.currentScreen;
+
+        // Iniciar la música según el estado inicial
+        if (state.currentScreen == ScreenState::MAIN_MENU ||
+            state.currentScreen == ScreenState::OPTIONS ||
+            state.currentScreen == ScreenState::INSTRUCTIONS ||
+            state.currentScreen == ScreenState::CREDITS)
+        {
+            SeekMusicStream(resource::menuSong, 0.0f);
+            PlayMusicStream(resource::menuSong);
+        }
+        else if (state.currentScreen == ScreenState::GAMEPLAY)
+        {
+            SeekMusicStream(resource::gameSong, 0.0f);
+            PlayMusicStream(resource::gameSong);
+        }
+        else if (state.currentScreen == ScreenState::PAUSE_MENU)
+        {
+            SeekMusicStream(resource::pauseSong, 0.0f);
+            PlayMusicStream(resource::pauseSong);
+        }
 
         while (!WindowShouldClose())
         {
             float deltaTime = GetFrameTime();
 
+            // Actualizar música dependiendo del estado (si no estamos en Game Over)
+            if (!state.gameOver)
+            {
+                if (state.currentScreen == ScreenState::MAIN_MENU ||
+                    state.currentScreen == ScreenState::OPTIONS ||
+                    state.currentScreen == ScreenState::INSTRUCTIONS ||
+                    state.currentScreen == ScreenState::CREDITS)
+                {
+                    UpdateMusicStream(resource::menuSong);
+                    if (GetMusicTimePlayed(resource::menuSong) >= GetMusicTimeLength(resource::menuSong))
+                        SeekMusicStream(resource::menuSong, 0.0f);
+                }
+                else if (state.currentScreen == ScreenState::GAMEPLAY)
+                {
+                    UpdateMusicStream(resource::gameSong);
+                    if (GetMusicTimePlayed(resource::gameSong) >= GetMusicTimeLength(resource::gameSong))
+                        SeekMusicStream(resource::gameSong, 0.0f);
+                }
+                else if (state.currentScreen == ScreenState::PAUSE_MENU)
+                {
+                    UpdateMusicStream(resource::pauseSong);
+                    if (GetMusicTimePlayed(resource::pauseSong) >= GetMusicTimeLength(resource::pauseSong))
+                        SeekMusicStream(resource::pauseSong, 0.0f);
+                }
+            }
+            else // Estado Game Over
+            {
+                UpdateMusicStream(resource::gameOverSong);
+                // Si ya se ha reproducido la totalidad de la canción, detenemos la reproducción para evitar que se reinicie
+                if (GetMusicTimePlayed(resource::gameOverSong) >= GetMusicTimeLength(resource::gameOverSong))
+                {
+                    StopMusicStream(resource::gameOverSong);
+                }
+            }
+
+            // Detectar cambio de estado y reiniciar la música correspondiente
+            if (state.currentScreen != lastScreen)
+            {
+                StopMusicStream(resource::menuSong);
+                StopMusicStream(resource::gameSong);
+                StopMusicStream(resource::pauseSong);
+                StopMusicStream(resource::gameOverSong);
+
+                if (state.gameOver)
+                {
+                    // Reiniciamos y reproducimos la canción de Game Over desde el inicio
+                    SeekMusicStream(resource::gameOverSong, 0.0f);
+                    PlayMusicStream(resource::gameOverSong);
+                }
+                else if (state.currentScreen == ScreenState::MAIN_MENU ||
+                    state.currentScreen == ScreenState::OPTIONS ||
+                    state.currentScreen == ScreenState::INSTRUCTIONS ||
+                    state.currentScreen == ScreenState::CREDITS)
+                {
+                    SeekMusicStream(resource::menuSong, 0.0f);
+                    PlayMusicStream(resource::menuSong);
+                }
+                else if (state.currentScreen == ScreenState::GAMEPLAY)
+                {
+                    SeekMusicStream(resource::gameSong, 0.0f);
+                    PlayMusicStream(resource::gameSong);
+                }
+                else if (state.currentScreen == ScreenState::PAUSE_MENU)
+                {
+                    SeekMusicStream(resource::pauseSong, 0.0f);
+                    PlayMusicStream(resource::pauseSong);
+                }
+                lastScreen = state.currentScreen;
+            }
+
+
+            // Procesamiento del estado del juego
             if (state.currentScreen == ScreenState::EXIT)
                 break;
+
             if (state.gameOver)
             {
                 UpdateGameOver(state);
-                if (state.currentScreen == ScreenState::MAIN_MENU)
-                {
-                    state.gameOver = false;
-                }
                 RenderGameOver(state);
             }
             else
@@ -460,14 +564,12 @@ namespace game
                     menu::UpdateMainMenu(state);
                     menu::RenderMainMenu(state);
                     break;
-
                 case ScreenState::GAMEPLAY:
                     if (IsKeyPressed(KEY_P) || IsKeyPressed(KEY_ESCAPE))
                     {
                         state.previousScreen = ScreenState::GAMEPLAY;
                         state.currentScreen = ScreenState::PAUSE_MENU;
                     }
-
                     if (!state.gameOver)
                     {
                         UpdateGame(state, deltaTime);
@@ -480,17 +582,14 @@ namespace game
                     }
                     RenderFrame(state);
                     break;
-
                 case ScreenState::PAUSE_MENU:
                     menu::UpdatePauseMenu(state);
                     menu::RenderPauseMenu(state);
                     break;
-
                 case ScreenState::OPTIONS:
                     menu::UpdateSubMenu(state);
                     menu::RenderSubMenu(state, "OPTIONS", "Settings can be configured here.");
                     break;
-
                 case ScreenState::INSTRUCTIONS:
                     menu::UpdateSubMenu(state);
                     menu::RenderSubMenu(state, "INSTRUCTIONS",
@@ -498,21 +597,20 @@ namespace game
                         "mouse to select options, and ESC to go back.\n"
                         "P: Pause/Resume");
                     break;
-
                 case ScreenState::CREDITS:
                     menu::UpdateSubMenu(state);
                     menu::RenderSubMenu(state, "CREDITS",
                         "Developed by: Leonardo Brizuela.\n Game version: v0.2");
                     break;
-
                 default:
                     break;
                 }
             }
-
         }
 
         resource::UnloadResources();
         CloseWindow();
     }
+
+
 }
