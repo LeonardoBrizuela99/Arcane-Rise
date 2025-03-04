@@ -10,6 +10,11 @@ namespace resource
 
 
     extern Texture2D backgroundTexture;
+    extern Texture2D instruction;
+    extern Texture2D credits;
+    extern Texture2D pause;
+    extern Texture2D gameOver;
+    extern Texture2D options;
     extern Texture2D playerTexture1;
     extern Texture2D playerTexture2;
     extern Texture2D obstacleTexture;

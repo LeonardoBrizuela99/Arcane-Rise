@@ -4,6 +4,11 @@
 namespace resource {
 
     Texture2D backgroundTexture = { 0 };
+    Texture2D instruction = {0};
+    Texture2D credits = {0};
+    Texture2D pause = {0};
+    Texture2D options = {0};
+    Texture2D gameOver = {0};
 
     Texture2D playerTexture1 = { 0 };
     Texture2D playerTexture2 = { 0 };
@@ -44,6 +49,13 @@ namespace resource {
         backgroundTexture = LoadTexture("../../res/textures/main_menu.png");
         shieldTexture = LoadTexture("../../res/textures/escudo.png");
         gameBackgroundTexture = LoadTexture("../../res/textures/game_background.png");
+        instruction = LoadTexture("../../res/textures/instructions.png");
+        credits = LoadTexture("../../res/textures/instruction.png");
+        gameOver = LoadTexture("../../res/textures/gameOver.png");
+        options = LoadTexture("../../res/textures/instruction.png");
+        
+
+        pause = LoadTexture(".. / .. / res / textures / game_background.png");
 
 
         InitAudioDevice();
@@ -78,6 +90,12 @@ namespace resource {
         UnloadTexture(gameBackgroundTexture);
         UnloadTexture(powerUpSpeedTexture);
         UnloadTexture(powerUpShieldTexture);
+        UnloadTexture(pause);
+        UnloadTexture(instruction);
+        UnloadTexture(credits);
+        UnloadTexture(pause);
+        UnloadTexture(gameOver);
+        UnloadTexture(options);
 
         UnloadSound(pop);
         UnloadSound(powerUp);       

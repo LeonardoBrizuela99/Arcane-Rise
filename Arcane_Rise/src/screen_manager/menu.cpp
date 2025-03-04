@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "game_manager/game.h"
 #include"resource_manager/resource_manager.h"
+#include <string>
 
 
 struct MenuOption {
@@ -9,30 +10,23 @@ struct MenuOption {
     const char* text;
 };
 
-
 static const Color BUTTON_NORMAL_BG = { 250, 235, 215, 255 };
 static const Color BUTTON_HOVER_BG = { 244, 164, 96, 255 };
 static const Color TEXT_NORMAL = BLACK;
 static const Color TEXT_HOVER = BLUE;
 
-
-
 static const int MAIN_MENU_OPTION_COUNT = 5;
 static MenuOption mainMenuOptions[MAIN_MENU_OPTION_COUNT];
 static bool mainMenuInitialized = false;
 
-
-
 static void InitMainMenuOptions()
 {
-
     float buttonWidth = 300;
     float buttonHeight = 50;
     float startX = game::GAME_SCREEN_WIDTH / 2 - buttonWidth / 2;
     float startY = 200;
 
     float spacing = 70;
-
 
     const char* texts[MAIN_MENU_OPTION_COUNT] = { "Start Game", "Options", "Instructions", "Credits", "Exit" };
 
@@ -50,7 +44,6 @@ namespace menu {
 
     void UpdateMainMenu(game::GameState& state)
     {
-       
         if (!mainMenuInitialized)
             InitMainMenuOptions();
 
@@ -61,7 +54,6 @@ namespace menu {
             {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-                    
                     PlaySound(resource::select);
                     switch (i)
                     {
@@ -92,9 +84,6 @@ namespace menu {
         }
     }
 
-    
-
-
     void RenderMainMenu(const game::GameState&)
     {
         BeginDrawing();
@@ -115,8 +104,6 @@ namespace menu {
         }
         EndDrawing();
     }
-
-
 
     static const int PAUSE_MENU_OPTION_COUNT = 5;
     static MenuOption pauseMenuOptions[PAUSE_MENU_OPTION_COUNT];
@@ -148,7 +135,6 @@ namespace menu {
         for (int i = 0; i < PAUSE_MENU_OPTION_COUNT; i++) {
             if (CheckCollisionPointRec(mousePos, pauseMenuOptions[i].rect)) {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    
                     PlaySound(resource::select);
                     switch (i) {
                     case 0:
@@ -176,8 +162,6 @@ namespace menu {
             }
         }
     }
-
-
 
     void RenderPauseMenu(const game::GameState&)
     {
@@ -207,7 +191,6 @@ namespace menu {
         EndDrawing();
     }
 
-
     void UpdateSubMenu(game::GameState& state)
     {
         if (IsKeyPressed(KEY_ESCAPE))
@@ -215,7 +198,7 @@ namespace menu {
 
         const int backBtnWidth = 150;
         const int backBtnHeight = 50;
-        Rectangle backButton = { 20,  600- backBtnHeight - 20, backBtnWidth, backBtnHeight };
+        Rectangle backButton = { 20,  600 - backBtnHeight - 20, backBtnWidth, backBtnHeight };
 
         if (CheckCollisionPointRec(GetMousePosition(), backButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -224,17 +207,16 @@ namespace menu {
         }
     }
 
-
-
-    void RenderSubMenu(const game::GameState&, const char title[], const char info[]) {
+    void RenderSubMenu(const game::GameState&, const char title[]) {
         BeginDrawing();
+        std::string menuTitle = title;
+
+        if (menuTitle == "INSTRUCTIONS") {
+            DrawTexture(resource::instruction, 0, 0, WHITE);
+        }
+
         ClearBackground(RAYWHITE);
-
-        int titleFontSize = 40;
-        int titleWidth = MeasureText(title, titleFontSize);
-        DrawText(title, game::GAME_SCREEN_WIDTH / 2 - titleWidth / 2, 100, titleFontSize, DARKBLUE);
-        DrawText(info, game::GAME_SCREEN_WIDTH / 2 - 200, 200, 20, BLACK);
-
+       
 
         const int backBtnWidth = 150;
         const int backBtnHeight = 50;
@@ -253,6 +235,4 @@ namespace menu {
 
         EndDrawing();
     }
-
-
 }

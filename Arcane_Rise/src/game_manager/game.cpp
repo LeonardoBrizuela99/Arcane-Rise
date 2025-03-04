@@ -232,15 +232,13 @@ namespace game
         ClearBackground(RAYWHITE);
       
 
-        int titleFontSize = 40;
-        int titleWidth = MeasureText("GAME OVER", titleFontSize);
-        DrawText("GAME OVER", static_cast<int>(GAME_SCREEN_WIDTH / 2 - titleWidth / 2), 100, titleFontSize, RED);
+        DrawTexture(resource::gameOver, 0, 0, WHITE);
 
 
         int scoreFontSize = 30;
         const char* scoreText = TextFormat("Score: %d", state.localGameScore);
         int scoreWidth = MeasureText(scoreText, scoreFontSize);
-        DrawText(scoreText, static_cast<int>(GAME_SCREEN_WIDTH / 2 - scoreWidth / 2), 160, scoreFontSize, BLACK);
+        DrawText(scoreText, static_cast<int>(GAME_SCREEN_WIDTH / 2 - scoreWidth / 2), 160, scoreFontSize, WHITE);
 
 
         Rectangle restartBtn = { static_cast<float>(GAME_SCREEN_WIDTH / 2 - 160), 250, 150, 50 };
@@ -432,14 +430,14 @@ namespace game
         DrawPowerUp(state.powerUp);
         DrawSideEnemies(state.sideEnemies, MAX_SIDE_ENEMIES);
 
-        DrawText(TextFormat("Score: %d", state.localGameScore), 10, 10, 20, BLACK);
+        DrawText(TextFormat("Score: %d", state.localGameScore), 10, 10, 20, WHITE);
 
-        if (state.gameOver)
+        /*if (state.gameOver)
         {
             DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - 50, GAME_SCREEN_HEIGHT / 2, 30, RED);
             DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - 70,
                 GAME_SCREEN_HEIGHT / 2 + 40, 20, DARKGRAY);
-        }
+        }*/
 
         EndDrawing();
     }
@@ -591,19 +589,15 @@ namespace game
                     break;
                 case ScreenState::OPTIONS:
                     menu::UpdateSubMenu(state);
-                    menu::RenderSubMenu(state, "OPTIONS", "Settings can be configured here.");
+                    menu::RenderSubMenu(state, "OPTIONS");
                     break;
                 case ScreenState::INSTRUCTIONS:
                     menu::UpdateSubMenu(state);
-                    menu::RenderSubMenu(state, "INSTRUCTIONS",
-                        "Use arrows or A/D to move,\n"
-                        "mouse to select options, and ESC to go back.\n"
-                        "P: Pause/Resume");
+                    menu::RenderSubMenu(state, "INSTRUCTIONS" );
                     break;
                 case ScreenState::CREDITS:
                     menu::UpdateSubMenu(state);
-                    menu::RenderSubMenu(state, "CREDITS",
-                        "Developed by: Leonardo Brizuela.\n Game version: v0.2");
+                    menu::RenderSubMenu(state, "CREDITS   ");
                     break;
                 default:
                     break;
