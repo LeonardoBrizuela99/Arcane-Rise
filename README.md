@@ -56,7 +56,7 @@ para tu proyecto (incluyendo los headers y bibliotecas correspondientes).
 * Durante el juego, usá las teclas de dirección para mover el jugador y evita los obstáculos, enemigos y power-ups según la mecánica implementada.
 * Al perder (Game Over), se reproducirá una canción específica y se mostrarán opciones para reiniciar o volver al menú principal.
 * Créditos
-* Dev/animador/arte(menu principal, menu de pausa, creditos, instrucciones, gameover, peronsaje, enemigos, power ups, etc ) por Leonardo Brizuela.
+* Dev/animador/arte(menu principal, menu de pausa, creditos, instrucciones, gameover, personaje, enemigos, power ups, etc ) por Leonardo Brizuela.
 ## Musica
 * Por Mrthenoronha.
   - (https://freesound.org/people/Mrthenoronha/sounds/521656/) 
