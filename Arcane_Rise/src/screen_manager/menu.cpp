@@ -168,12 +168,7 @@ namespace menu {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawTexture(resource::pause, 0, 0, WHITE);
-
-       /* const char* title = "PAUSE MENU";
-        int titleFontSize = 40;
-        int titleWidth = MeasureText(title, titleFontSize);
-        DrawText(title, game::GAME_SCREEN_WIDTH / 2 - titleWidth / 2, 100, titleFontSize, DARKBLUE);*/
-
+     
         Vector2 mousePos = GetMousePosition();
         for (int i = 0; i < PAUSE_MENU_OPTION_COUNT; i++) {
             bool hovered = CheckCollisionPointRec(mousePos, pauseMenuOptions[i].rect);
@@ -211,14 +206,22 @@ namespace menu {
     void RenderSubMenu(const game::GameState&, const char title[]) {
         BeginDrawing();
         std::string menuTitle = title;
-
-        if (menuTitle == "INSTRUCTIONS") {
+       
+        if (menuTitle == "INSTRUCTIONS") 
+        {
             DrawTexture(resource::instruction, 0, 0, WHITE);
         }
-
+        else if (menuTitle == "OPTIONS") 
+        {
+            DrawTexture(resource::options, 0, 0, WHITE);
+        }
+        else if (menuTitle == "CREDITS")
+        {
+            
+            DrawTexture(resource::credits, 0, 0, WHITE);
+        }     
         ClearBackground(RAYWHITE);
-       
-
+        
         const int backBtnWidth = 150;
         const int backBtnHeight = 50;
         Rectangle backButton = { 20, 600 - backBtnHeight - 20, backBtnWidth, backBtnHeight };

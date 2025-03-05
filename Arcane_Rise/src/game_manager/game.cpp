@@ -581,11 +581,11 @@ namespace game
                     break;
                 case ScreenState::INSTRUCTIONS:
                     menu::UpdateSubMenu(state);
-                    menu::RenderSubMenu(state, "INSTRUCTIONS" );
+                    menu::RenderSubMenu(state, "INSTRUCTIONS");
                     break;
                 case ScreenState::CREDITS:
                     menu::UpdateSubMenu(state);
-                    menu::RenderSubMenu(state, "CREDITS   ");
+                    menu::RenderSubMenu(state, "CREDITS");
                     break;
                 default:
                     break;

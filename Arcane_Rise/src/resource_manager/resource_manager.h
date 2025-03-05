@@ -27,7 +27,7 @@ namespace resource
     extern Texture2D powerUpShieldTexture;
 
     extern Sound shieldSound;
-    extern Sound explosionSound;
+   
    
     extern Sound select;
     extern Sound pop;

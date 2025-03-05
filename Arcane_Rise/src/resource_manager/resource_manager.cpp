@@ -50,9 +50,9 @@ namespace resource {
         shieldTexture = LoadTexture("../../res/textures/escudo.png");
         gameBackgroundTexture = LoadTexture("../../res/textures/game_background.png");
         instruction = LoadTexture("../../res/textures/instructions.png");
-        credits = LoadTexture("../../res/textures/instruction.png");
+        credits = LoadTexture("../../res/textures/credits.png");
         gameOver = LoadTexture("../../res/textures/gameOver.png");
-        options = LoadTexture("../../res/textures/instruction.png");
+        options = LoadTexture("../../res/textures/options.png");
         
 
         pause = LoadTexture("../../res/textures/pause_text.png");
