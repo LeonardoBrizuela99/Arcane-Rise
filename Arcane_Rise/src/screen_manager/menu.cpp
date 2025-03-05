@@ -167,11 +167,12 @@ namespace menu {
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        DrawTexture(resource::pause, 0, 0, WHITE);
 
-        const char* title = "PAUSE MENU";
+       /* const char* title = "PAUSE MENU";
         int titleFontSize = 40;
         int titleWidth = MeasureText(title, titleFontSize);
-        DrawText(title, game::GAME_SCREEN_WIDTH / 2 - titleWidth / 2, 100, titleFontSize, DARKBLUE);
+        DrawText(title, game::GAME_SCREEN_WIDTH / 2 - titleWidth / 2, 100, titleFontSize, DARKBLUE);*/
 
         Vector2 mousePos = GetMousePosition();
         for (int i = 0; i < PAUSE_MENU_OPTION_COUNT; i++) {

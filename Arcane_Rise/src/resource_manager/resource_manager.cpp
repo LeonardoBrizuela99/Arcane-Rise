@@ -55,7 +55,7 @@ namespace resource {
         options = LoadTexture("../../res/textures/instruction.png");
         
 
-        pause = LoadTexture(".. / .. / res / textures / game_background.png");
+        pause = LoadTexture("../../res/textures/pause_text.png");
 
 
         InitAudioDevice();

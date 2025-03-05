@@ -312,12 +312,6 @@ namespace game
         }
     }
 
-
-
-
-
-
-
     void ProcessCollisions(GameState& state)
     {
         for (int i = 0; i < MAX_OBSTACLES; i++)
@@ -431,14 +425,7 @@ namespace game
         DrawSideEnemies(state.sideEnemies, MAX_SIDE_ENEMIES);
 
         DrawText(TextFormat("Score: %d", state.localGameScore), 10, 10, 20, WHITE);
-
-        /*if (state.gameOver)
-        {
-            DrawText("GAME OVER", GAME_SCREEN_WIDTH / 2 - 50, GAME_SCREEN_HEIGHT / 2, 30, RED);
-            DrawText("Press R to Restart", GAME_SCREEN_WIDTH / 2 - 70,
-                GAME_SCREEN_HEIGHT / 2 + 40, 20, DARKGRAY);
-        }*/
-
+        
         EndDrawing();
     }
 
@@ -471,6 +458,7 @@ namespace game
         }
         else if (state.currentScreen == ScreenState::PAUSE_MENU)
         {
+             
             SeekMusicStream(resource::pauseSong, 0.0f);
             PlayMusicStream(resource::pauseSong);
         }
