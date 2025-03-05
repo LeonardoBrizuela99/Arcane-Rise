@@ -1,4 +1,4 @@
-#Arcane Rise
+Arcane Rise/n
 Arcane Rise es un juego 2D desarrollado en C++ utilizando Visual Studio y Raylib. El juego implementa un sistema de menús (Main Menu, Pausa, Submenús para Instrucciones, Créditos, etc.), manejo de recursos (texturas y sonidos), animaciones básicas y colisiones entre el jugador, obstáculos, enemigos y power-ups.
 
 Características
