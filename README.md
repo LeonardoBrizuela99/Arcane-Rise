@@ -74,4 +74,13 @@ para tu proyecto (incluyendo los headers y bibliotecas correspondientes).
 
 ## Versión del juego: v1.0
 
+# Bugs
+* Música en bucle en el game over
+* Desaparición repentina del side enemy cuando sale por primera vez
+* Reinicio de música del menu principal, juego y menú de pausa cada vez que se ingresa.
+
+# Futuro Update
+* Implementar opciones, ya que en esta opción no se muestra nada.
+
+
 
